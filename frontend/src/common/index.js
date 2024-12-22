@@ -1,6 +1,6 @@
 
-const backendDomain = "http://localhost:8001";
-const BankbackendDomain = "http://localhost:8002";
+const backendDomain = process.env.P_SHOP
+const BankbackendDomain = process.env.BANK 
 
 const SummaryApi = {
     SignUp: {
