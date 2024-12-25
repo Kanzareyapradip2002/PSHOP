@@ -16,6 +16,7 @@ import MusicinstrumentsList from './MusicinstrumentsList'
 const Category = () => {
   const data = useParams()
   const Category = data.categoryName
+  console.log(data)
   //----------------ElectronicList--------------------------//
   if (Category === "printers") {
     return (

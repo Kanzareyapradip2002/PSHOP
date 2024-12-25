@@ -5,7 +5,6 @@ import CONFIRMATION from '../../common/Confirmation';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 const ConformedOrderPage = ({
     Confirmation,
     OrderID,
@@ -32,7 +31,8 @@ const ConformedOrderPage = ({
 }) => {
     const [Confirmed, setConfirmed] = useState(Confirmation);
     const [loading, setLoading] = useState(false);
-    const naviget = useNavigate()
+    const naviget = useNavigate();
+
     // Update state if Confirmation prop changes
     useEffect(() => {
         setConfirmed(Confirmation);
@@ -66,7 +66,7 @@ const ConformedOrderPage = ({
             if (responseData.success) {
                 toast.success(responseData.message);
                 handleSubmit();
-                naviget("admin-panel/all-users")
+                naviget("admin-panel/all-users");
             } else {
                 toast.error(responseData.message || 'Failed to update confirmation.');
             }
@@ -80,7 +80,6 @@ const ConformedOrderPage = ({
         }
     };
 
-    console.log()
     // Function to handle the confirm button click
     const updateUserRole = async () => {
         if (!Confirmed) {
@@ -99,25 +98,25 @@ const ConformedOrderPage = ({
         try {
             // Sending the order details via email
             const response = await axios.post(SummaryApi.SendEmailOrderDetels.url, {
-                email:Email,
-                ProductImage:ProdactImage,  
-                productName:ProductName,
-                productBrand:ProductBrand,
-                productCategory:ProductCategory,
-                productQuantity:ProductQuantity,
-                productPrice:ProductPrice,
-                discount:Discount,
-                totalPrice:TotalPrice,
-                accountHolderName:AccountHolderName,
-                accountNumber:AccountNumber,
-                mobileNo:MobileNo,
-                fullName:FullName,
-                altMobileNo:AltMobileNo,
-                pinCode:PinCode,
-                city:City,
-                state:State,
-                houseNo:HouseNo,
-                roadName:RoadName,
+                email: Email,
+                ProductImage: ProdactImage,
+                productName: ProductName,
+                productBrand: ProductBrand,
+                productCategory: ProductCategory,
+                productQuantity: ProductQuantity,
+                productPrice: ProductPrice,
+                discount: Discount,
+                totalPrice: TotalPrice,
+                accountHolderName: AccountHolderName,
+                accountNumber: AccountNumber,
+                mobileNo: MobileNo,
+                fullName: FullName,
+                altMobileNo: AltMobileNo,
+                pinCode: PinCode,
+                city: City,
+                state: State,
+                houseNo: HouseNo,
+                roadName: RoadName,
             });
 
             if (response.status === 200) {
@@ -132,10 +131,10 @@ const ConformedOrderPage = ({
     };
 
     return (
-        <div className="mx-auto p-4 w-full max-w-sm">
+        <div className="mx-auto p-4 w-full max-w-sm md:max-w-md lg:max-w-lg">
             {/* Confirmation dropdown */}
             <select
-                className="border px-4 text-xl rounded-lg font-semibold ml-16 w-60 h-14 py-1 cursor-pointer"
+                className="border px-4 text-xl rounded-lg font-semibold w-60 h-14 py-1 cursor-pointer md:w-72 md:ml-10 lg:w-96 ml-3 xl:w-1/2"
                 value={Confirmed}
                 onChange={handleOnChangeSelect}
             >
@@ -148,7 +147,7 @@ const ConformedOrderPage = ({
 
             {/* Confirm order button */}
             <button
-                className={`w-fit mx-auto ml-28 font-semibold mt-3 block border py-1 px-6 rounded-full bg-red-600 text-white hover:bg-red-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-fit mx-auto mt-3 block border py-1 px-6 rounded-full bg-red-600 text-white hover:bg-red-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''} md:w-full lg:w-1/2`}
                 onClick={updateUserRole}
                 disabled={loading}
             >

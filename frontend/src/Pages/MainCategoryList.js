@@ -5,9 +5,9 @@ import GroceryList from '../Components/GroceryList'
 import MedicinesList from '../Components/MedicinesList'
 import AutoAccessoriesList from '../Components/AutoAccessoriesList'
 import SportsList from '../Components/SportsList'
-import FoodHealthcareList from '../Components/Food&HealthcareList'
-import Toys_Baby_BooksList from '../Components/Toys_Baby_BooksList'
-import Beauty_PersonalCareList from '../Components/Beauty&PersonalCareList'
+import FoodHealthcareList from '../Components/FoodHealthcareList'
+import ToysBabyBooksList from '../Components/ToysBabyBooksList'
+import BeautyPersonalCareList from '../Components/BeautyPersonalCareList'
 import FurnitureList from '../Components/FurnitureList'
 import HomeList from '../Components/HomeList'
 import FashionList from '../Components/FashionList'
@@ -35,17 +35,17 @@ const MainCategoryList = () => {
         return(
             <SportsList/>
         )
-    }else if(MainCategory === "food&Healthcare"){
+    }else if(MainCategory === "foodHealthcare"){
         return(
             <FoodHealthcareList/>
         )
-    }else if(MainCategory === "toys_Baby_Books"){
+    }else if(MainCategory === "toysBabyBooks"){
         return(
-            <Toys_Baby_BooksList/>
+            <ToysBabyBooksList/>
         )
-    }else if(MainCategory === "beauty&PersonalCare"){
+    }else if(MainCategory === "beautyPersonalCare"){
         return(
-            <Beauty_PersonalCareList/>
+            <BeautyPersonalCareList/>
         )
     }else if(MainCategory === "furniture"){
         return(

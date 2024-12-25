@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
-import BannerProduct from '../Pages/Banner/BannerProduct';
 import HorizontalCardProduct from './HorizontalCardProduct';
-import { AiFillOpenAI, AiOutlineLine } from 'react-icons/ai';
+import CarouselHome from '../Pages/Banner/CarouselHome';
+
 
 const FashionList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
@@ -33,8 +33,8 @@ const FashionList = () => {
 
     return (
         <>
-            <div className='container mx-3 p-3'>
-                <div className='flex items-center mr-[-258px]  gap-8 flex-row overflow-scroll scrollbar-none'>
+            <div className='container p-3'>
+                <div className='flex items-center gap-8 flex-row overflow-scroll scrollbar-none sm:mr-[-16px] lg:mr-[-140px]'>
                     {loading ? (
                         categoryLoading.map((_, index) => (
                             <div
@@ -63,17 +63,10 @@ const FashionList = () => {
                     )}
                 </div>
             </div>
-            <BannerProduct />
-            <div className='h-full w-full bg-slate-50 shadow-md p-3 mt-[-100px]'>
-                <h2 className='text-2xl flex font-bold ml-[500px] '>
-                    <AiOutlineLine className='mt-1' />
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    Jeans
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    <AiOutlineLine className='mt-1' />
-                </h2>
-                <HorizontalCardProduct category={"jeans"} heaing={"Top's Jeans"} />
+            <div className=' overflow-y-hidden'>
+                <CarouselHome />
             </div>
+            <HorizontalCardProduct category={"jeans"} heaing={"Top's Jeans"} />
         </>
     );
 };

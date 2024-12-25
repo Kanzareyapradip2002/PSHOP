@@ -12,7 +12,6 @@ const AddBankAccountSchema = new mongoose.Schema({
     EmailId:String,
     AccountType:String,
     AccountNumber:String,
-    ProcuctCode:String,
 },{
    timestamps:true
 })

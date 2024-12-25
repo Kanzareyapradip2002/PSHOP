@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
-import BannerProduct from '../Pages/Banner/BannerProduct';
 import HorizontalCardProduct from './HorizontalCardProduct';
+import CarouselHome from '../Pages/Banner/CarouselHome';
 
 const ElectronicList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
@@ -41,8 +41,8 @@ const ElectronicList = () => {
 
     return (
         <>
-            <div className='container mx-3 p-3'>
-                <div className='flex items-center mr-[-258px] gap-8 flex-row overflow-scroll scrollbar-none'>
+            <div className='container p-3'>
+                <div className='flex items-center gap-8 flex-row overflow-scroll scrollbar-none sm:mr-[-16px] lg:mr-[-140px]'>
                     {loading ? (
                         categoryLoading.map((_, index) => (
                             <div
@@ -71,11 +71,12 @@ const ElectronicList = () => {
                     )}
                 </div>
             </div>
-            <BannerProduct />
-            <div className='h-full w-full bg-slate-50 shadow-md p-3 mt-[-100px]'>
-                <HorizontalCardProduct category={"airpodes"} heading={"Top's Airpodes"} />
-                <HorizontalCardProduct category={"printers"} heading={"Top's Printers"} />
+            <div className=' overflow-y-hidden'>
+                <CarouselHome />
             </div>
+            <HorizontalCardProduct category={"airpodes"} heading={"Top's Airpodes"} />
+            <HorizontalCardProduct category={"printers"} heading={"Top's Printers"} />
+
         </>
     );
 };

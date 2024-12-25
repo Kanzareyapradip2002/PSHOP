@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';  // Assuming you are using react-toastify
+import { toast } from 'react-toastify';
 import SummaryApi from '../../common';
 import { Link } from 'react-router-dom';
+import Logo from '../../assest/p-shop.png';  // Simple loading state
 
 const OrderProcessing = () => {
     const [allAddToCart, setAllAddToCart] = useState([]);
@@ -42,7 +43,12 @@ const OrderProcessing = () => {
     }, [verificationCodes]);
 
     if (loading) {
-        return <div>Loading...</div>;  // Simple loading state
+        return<p>
+                    <div class="ring">
+                        <img src={Logo} alt='logo' className='mt-3' />
+                        <span></span>
+                    </div>
+                </p>
     }
 
     if (error) {
@@ -54,30 +60,28 @@ const OrderProcessing = () => {
 
     return (
         <div>
-            <div className='bg-white p-2'>
-                <h2 className='font-bold'>Processing Order Book</h2>
+            <div className='bg-white p-4'>
+                <h2 className='font-bold text-xl md:text-2xl'>Processing Order Book</h2>
             </div>
             {allAddToCart.length === 0 ? (
                 <p>No items in the cart for this verification code.</p>
             ) : processingItems.length === 0 ? (
-                <p>No items are being processed .</p>
+                <p>No items are being processed.</p>
             ) : (
-                <ul className=' flex flex-wrap gap-2'>
+                <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4'>
                     {processingItems.map((item, index) => (
-                    <Link to={`ConformedPage/${item._id}`}>
-                        <li key={index} >
-                            <div className='mt-2 w-32 bg-white rounded-md'>
-                                <div>
-                                    <img 
-                                        src={item.ProductImage} 
-                                        alt={`Product: ${item.ProductName}`}  // More descriptive alt text
-                                        className='mix-blend-multiply h-28 ml-5 w-24' 
-                                        />
+                        <Link to={`ConformedPage/${item._id}`} key={index}>
+                            <li className='flex flex-col items-center bg-white rounded-md shadow-md p-4'>
+                                <div className='w-full flex justify-center mb-3'>
+                                    <img
+                                        src={item.ProductImage}
+                                        alt={`Product: ${item.ProductName}`}
+                                        className='w-24 h-24 object-contain'
+                                    />
                                 </div>
-                                <div className='ml-3 font-semibold pb-2 text-lg'>{item.ProductName}</div>
-                            </div>
-                        </li>
-                    </Link>
+                                <div className='text-center font-semibold text-lg'>{item.ProductName}</div>
+                            </li>
+                        </Link>
                     ))}
                 </ul>
             )}

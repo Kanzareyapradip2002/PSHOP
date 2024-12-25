@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';  // Assuming you are using react-toastify
 import SummaryApi from '../../common';
 import { Link } from 'react-router-dom';
+import Logo from '../../assest/p-shop.png';  // Simple loading state
 
 const OrderConformed = () => {
     const [allAddToCart, setAllAddToCart] = useState([]);
@@ -42,45 +43,46 @@ const OrderConformed = () => {
     }, [verificationCodes]);
 
     if (loading) {
-        return <div>Loading...</div>;  // Simple loading state
+        return <p>
+                    <div class="ring">
+                        <img src={Logo} alt='logo' className='mt-3' />
+                        <span></span>
+                    </div>
+                </p>
     }
 
     if (error) {
         return <div>Error: {error}</div>;
     }
 
-    // Filter items that have the "Processing..." confirmation status
-    const processingItems = allAddToCart.filter(item => item.Confirmation === "Confirmed");
+    // Filter items that have the "Confirmed" confirmation status
+    const confirmedItems = allAddToCart.filter(item => item.Confirmation === "Confirmed");
 
     return (
         <div>
-            <div className='bg-white p-2'>
-                <h2 className='font-bold'>Conformed Order Book</h2>
+            <div className='bg-white p-4'>
+                <h2 className='font-bold text-xl md:text-2xl'>Confirmed Order Book</h2>
             </div>
             {allAddToCart.length === 0 ? (
                 <p>No items in the cart for this verification code.</p>
-            ) : processingItems.length === 0 ? (
-                <p>No items are being Conformed .</p>
+            ) : confirmedItems.length === 0 ? (
+                <p>No items are confirmed.</p>
             ) : (
-                <ul className=' flex flex-wrap gap-2' >
-                    {processingItems.map((item, index) => (
-                        <Link to={`ConformedPage/${item._id}`}>
-                            <li key={index}>
-                                <div className='mt-2 w-32 bg-white rounded-md'>
-                                    <div>
-                                        <img
-                                            src={item.ProductImage}
-                                            alt={`Product: ${item.ProductName}`}  // More descriptive alt text
-                                            className='mix-blend-multiply h-28 ml-5 w-24'
-                                        />
-
-                                    </div>
-                                    <div className='ml-3 font-semibold pb-2 text-lg'>{item.ProductName}</div>
+                <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4'>
+                    {confirmedItems.map((item, index) => (
+                        <Link to={`ConformedPage/${item._id}`} key={index}>
+                            <li className='flex flex-col items-center bg-white rounded-lg shadow-lg p-4 relative'>
+                                <div className='w-full flex justify-center mb-3'>
+                                    <img
+                                        src={item.ProductImage}
+                                        alt={`Product: ${item.ProductName}`}
+                                        className='w-24 h-24 object-contain' 
+                                    />
                                 </div>
-                                <div className=' font-bold w-[130px] mt-[-105px] -rotate-45 text-md bg-opacity-75 bg-green-500 rounded-lg'>
-                                    <p className='ml-5 pb-1 text-white'>
-                                        {item.Confirmation}
-                                    </p>
+                                <div className='text-center font-semibold text-lg'>{item.ProductName}</div>
+
+                                <div className='absolute top-6 -right-2  bg-green-500 bg-opacity-75 text-white px-3 py-1 text-sm font-bold rounded-lg transform rotate-45'>
+                                    {item.Confirmation}
                                 </div>
                             </li>
                         </Link>

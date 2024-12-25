@@ -26,7 +26,8 @@ const UserAddress = ({
 
   const user = useSelector((state) => state?.user?.user);
   const verificationCodes = user?.verificationCode;
-  const Confirmation = "Processing"
+  const Confirmation = "Processing";
+
   // Fetch all addresses
   const fetchAllAddress = async () => {
     try {
@@ -98,7 +99,7 @@ const UserAddress = ({
       ProductSellingPrice,
       Discount,
       Code,
-      DiscountPrice:DiscountPrice,
+      DiscountPrice: DiscountPrice,
       VerificationCodes: selectedAddress.verificationCode,
       FullName: selectedAddress.fullName,
       PhoneNumber: selectedAddress.phoneNumber,
@@ -109,8 +110,7 @@ const UserAddress = ({
       HouseNo: selectedAddress.houseNo,
       RoadName: selectedAddress.roadName,
       DeliveryChargePrice,
-      Confirmation:Confirmation
-
+      Confirmation: Confirmation,
     };
 
     try {
@@ -165,72 +165,72 @@ const UserAddress = ({
   return (
     <>
       <div className="container p-3">
-        <div className="flex md:gap-6 overflow-y-auto mr-[-190px] scrollbar-none">
-          <div
-            className="flex gap-4 ml-[14px] mr-[-900px]"
-            style={{ maxHeight: '500px', flexWrap: 'wrap' }}
-          >
-            {userAddresses.length > 0 ? (
-              userAddresses.map((address) => (
-                <div key={address._id} className="bg-white rounded-lg shadow-md w-[270px]">
-                  <div className="p-3">
-                    <div className="flex">
-                      <p>
-                        <strong>Address:</strong>
-                      </p>
-                      <input
-                        type="radio"
-                        className="w-5 ml-40"
-                        name="address"
-                        checked={selectedAddress?._id === address._id}
-                        onChange={() => handleAddressSelection(address)}
-                      />
-                    </div>
+        <div className="flex flex-wrap gap-2 overflow-y-auto">
+          {userAddresses.length > 0 ? (
+            userAddresses.map((address) => (
+              <div
+                key={address._id}
+                className="bg-white rounded-lg shadow-md w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
                     <p>
-                      <strong>Full Name:</strong> {address.fullName}
+                      <strong>Address:</strong>
                     </p>
-                    <p>
-                      <strong>Phone Number:</strong> {address.phoneNumber}
-                    </p>
-                    <p>
-                      <strong>Alt Phone Number:</strong> {address.altPhoneNumber}
-                    </p>
-                    <p>
-                      <strong>Pincode:</strong> {address.pincode}
-                    </p>
-                    <p>
-                      <strong>State:</strong> {address.state}
-                    </p>
-                    <p>
-                      <strong>House No:</strong> {address.houseNo}
-                    </p>
-                    <p>
-                      <strong>Road Name:</strong> {address.roadName}
-                    </p>
-                    <button
-                      type="button"
-                      className="p-2 ml-20 font-bold border border-red-600 cursor-pointer mt-2 rounded-lg hover:text-white hover:bg-red-500"
-                      onClick={() => DeleteAddress(address._id)}
-                    >
-                      Delete
-                    </button>
+                    <input
+                      type="radio"
+                      className="w-5"
+                      name="address"
+                      checked={selectedAddress?._id === address._id}
+                      onChange={() => handleAddressSelection(address)}
+                    />
                   </div>
+                  <p>
+                    <strong>Full Name:</strong> {address.fullName}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong> {address.phoneNumber}
+                  </p>
+                  <p>
+                    <strong>Alt Phone Number:</strong> {address.altPhoneNumber}
+                  </p>
+                  <p>
+                    <strong>Pincode:</strong> {address.pincode}
+                  </p>
+                  <p>
+                    <strong>State:</strong> {address.state}
+                  </p>
+                  <p>
+                    <strong>House No:</strong> {address.houseNo}
+                  </p>
+                  <p>
+                    <strong>Road Name:</strong> {address.roadName}
+                  </p>
+                  <button
+                    type="button"
+                    className="p-2 mt-2 font-bold border border-red-600 cursor-pointer rounded-lg hover:text-white hover:bg-red-500"
+                    onClick={() => DeleteAddress(address._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
-              ))
-            ) : (
-              <p>No addresses found for the current user.</p>
-            )}
-          </div>
+              </div>
+            ))
+          ) : (
+            <p>No addresses found for the current user.</p>
+          )}
         </div>
       </div>
-      <div className="h-[45px] w-full mt-6 bg-red-600 rounded-lg flex items-center">
+
+      <div 
+      onClick={handleAddToCartSubmit}
+      className="h-[45px] w-full cursor-pointer mt-6 bg-red-600 rounded-lg flex items-center justify-between px-4">
         <button
-          className="text-white font-bold text-lg ml-[560px] mx-auto"
-          onClick={handleAddToCartSubmit}
+          className="text-white font-bold text-lg"
         >
           AddToCart
         </button>
-        <p className="mt-[5px] mr-5 font-bold text-white ">{displayINRCurrency(TotalPrice)}</p>
+        <p className="font-bold text-white">{displayINRCurrency(TotalPrice)}</p>
       </div>
     </>
   );

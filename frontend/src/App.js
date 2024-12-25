@@ -4,7 +4,7 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback} from 'react';
 import SummaryApi from './common';
 import Context from './Context';
 import { useDispatch } from 'react-redux';

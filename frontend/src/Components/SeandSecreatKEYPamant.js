@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -9,10 +9,10 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
         email: '',
         KEY: '',
     });
-
     const [error, setError] = useState('');
     const [generatedOtp, setGeneratedOtp] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [timer, setTimer] = useState(0); // Timer for OTP countdown
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
@@ -27,7 +27,7 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Fix: Ensure the email entered matches the provided email
+        // Ensure the email entered matches the provided email
         if (data.email !== email) {
             toast.error("Please enter the correct email address.");
             setIsSubmitting(false);
@@ -42,6 +42,7 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
                 setGeneratedOtp(otpCode);
                 setSubmitOtp(true);
                 setData((prevData) => ({ ...prevData, KEY: '' }));
+                setTimer(120); // Start 2-minute timer
                 if (response) {
                     toast.success('KEY sent to email!');
                 }
@@ -51,7 +52,7 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
             }
         } else {
             if (data.KEY === String(generatedOtp)) {
-                toast.success(' Account Verification Success');
+                toast.success('Account Verification Success');
                 onClose();
             } else {
                 setError('Invalid KEY. Please try again.');
@@ -59,6 +60,27 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
         }
 
         setIsSubmitting(false);
+    };
+
+    // Countdown effect
+    useEffect(() => {
+        let interval;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+        } else {
+            clearInterval(interval); // Stop timer when it reaches 0
+        }
+
+        return () => clearInterval(interval); // Cleanup interval when component unmounts
+    }, [timer]);
+
+    // Format time into mm:ss
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
     };
 
     return (
@@ -100,19 +122,23 @@ const SeandSecreatKEYPamant = ({ onClose, email }) => {
                                     </div>
                                 )}
                                 {data.email === email && (
-                                    <button
-                                        type="submit"
-                                        className={`bg-red-600 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-4 hover:bg-red-700 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                        disabled={isSubmitting}
-                                    >
-                                        {submitOtp ? 'Submit OTP' : 'Send OTP'}
-                                    </button>
+                                    <>
+                                        <button
+                                            type='submit'
+                                            className={`bg-red-600 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-4 hover:bg-red-700 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            {(submitOtp ? 'Submit OTP' : 'Send OTP')}
+                                        </button>
+                                        <div className='ml-28'>
+                                            {
+                                                timer !== 0 && (
+                                                    `Otp Expierd :${formatTime(timer)}`
+                                                )
+                                            }
+                                        </div>
+                                    </>
                                 )}
-                                <div>
-                                    <p className='text-red-500'>*Please Enter Same Bank Account EmailId*</p>
-                                </div>
                             </form>
-
                         </div>
                     </div>
                 </div>

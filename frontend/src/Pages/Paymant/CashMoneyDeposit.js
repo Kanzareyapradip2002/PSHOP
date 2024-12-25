@@ -208,8 +208,8 @@ const CashMoneyDeposit = ({ TotalPrice, AddToCartData, BankAccountsData }) => {
                   onClick={() => handleDepositSubmit(accountData)}
                   className="bg-red-500 shadow-lg flex p-2 w-full rounded-lg"
                 >
-                  <h1 className="font-bold ml-7 text-xl text-white">Confirm Payment</h1>
-                  <h1 className="font-bold ml-auto text-xl text-white">{displayINRCurrency(TotalPrice)}</h1>
+                  <h1 className="font-bold text-lg text-white  lg:ml-7">ConfirmPayment</h1>
+                  <h1 className="font-bold ml-auto text-lg text-white ">{displayINRCurrency(TotalPrice)}</h1>
                 </button>
               </div>
             ))}

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import SummaryApi from '../../common';
 import displayINRCurrency from '../../helpers/displayCurrency';
 import { useNavigate } from 'react-router-dom';
-
+import Logo from '../../assest/p-shop.png'
 
 const AirpodesList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    
+
 
     const fetchCategoryProduct = async () => {
         setLoading(true);
@@ -27,9 +27,9 @@ const AirpodesList = () => {
             setLoading(false);
         }
     };
-    
+
     const handleShowDataCategory = (product) => {
-        navigate('/ShowCategoryProduct', { state: { product } });
+        navigate('/ShowCategory', { state: { product } });
     };
 
     useEffect(() => {
@@ -38,8 +38,11 @@ const AirpodesList = () => {
 
     return (
         <div className='container mx-3'>
-            <div className='flex items-center gap-3 mt-4'>
-                {loading && <p>Loading...</p>}
+            <div className='flex items-center gap-1 mt-4'>
+                {loading && <p><div class="ring">
+                    <img src={Logo} alt='' className='mt-3' />
+                    <span></span>
+                </div></p>}
                 {error && <p className='text-red-500'>{error}</p>}
                 {!loading && !error && categoryProduct.length === 0 && <p>No products found.</p>}
                 {!loading && !error && categoryProduct.map(product => {
@@ -49,8 +52,8 @@ const AirpodesList = () => {
                     const brand = product?.brandName;
                     const sellingPrice = parseFloat(product?.selling);
                     return (
-                        <div key={product.id} className="cursor-pointer pb-64 ">          
-                            <div className="bg-white h-52 w-48 shadow-md rounded-lg flex flex-col items-center p-4 " onClick={() => handleShowDataCategory(product)}>
+                        <div key={product.id} className="cursor-pointer pb-64 ">
+                            <div className="bg-white h-52 w-44 shadow-md rounded-lg flex flex-col items-center p-4 " onClick={() => handleShowDataCategory(product)}>
                                 <img src={productImage} className="h-28 w-24 object-cover" alt="" />
                                 <div className="card-body mt-2">
                                     <p className="card-text text-center text-gray-800 font-bold">{brand}</p>

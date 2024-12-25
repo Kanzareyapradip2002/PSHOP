@@ -43,25 +43,27 @@ const AddBank = () => {
       <ul>
         {bankAccounts.map((account) => (
           <li key={account.id}> {/* Using account.id if it's unique */}
-            <div className="flex flex-wrap">
-              <div className=' h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2'>
+            <div className="flex flex-wrap bg-slate-100 pr-3 pb-2 ml-2 h-full w-full mt-2 rounded">
+              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2 w-full sm:w-1/2 md:w-1/4'>
                 <h2 className='font-semibold'>Bank:</h2>
-                <img src={account.Bank} className='h-8' alt=''/>
+                <img src={account.Bank} className='h-8' alt='' />
               </div>
-              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2'>
+              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2 w-full sm:w-1/2 md:w-1/4'>
                 <h2 className='font-semibold'>Account Holder Name:</h2>
-                <h2>{account.AccountHolderName}</h2> {/* Handle undefined AccountHolderName */}
+                <h2>{account.AccountHolderName || 'N/A'}</h2> {/* Handle undefined AccountHolderName */}
               </div>
-              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2'>
+              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2 w-full sm:w-1/2 md:w-1/4'>
                 <h2 className='font-semibold'>Account Number:</h2>
-                <h2>{account.AccountNumber}</h2> {/* Handle undefined AccountHolderName */}
+                <h2>{account.AccountNumber || 'N/A'}</h2> {/* Handle undefined AccountNumber */}
               </div>
-              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2'>
+              <div className='h-16 rounded-md mt-2 ml-3 bg-white shadow-lg p-2 w-full sm:w-1/2 md:w-1/4'>
                 <h2 className='font-semibold'>Email Id:</h2>
-                <h2>{account.EmailId}</h2> {/* Handle undefined AccountHolderName */}
+                <div className='text-sm'>
+                  <h2>{account.EmailId || 'N/A'}</h2> {/* Handle undefined AccountNumber */}
+                </div>
               </div>
-              <Link to={`/PaymentPage/${account.AccountNumber}`} className='h-16 rounded-md mt-2 ml-3 bg-red-500 text-white  shadow-lg p-5 hover:text-black cursor-pointer hover:bg-red-600'>
-                 <h2 className='font-bold'>Pay</h2>
+              <Link to={`/PaymentPage/${account.AccountNumber}`} className='h-16 rounded-md mt-2 ml-3 bg-red-500 text-white shadow-lg p-5 w-full sm:w-auto cursor-pointer hover:bg-red-600'>
+                <h2 className='font-bold text-center'>Pay</h2>
               </Link>
             </div>
           </li>

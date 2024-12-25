@@ -15,7 +15,6 @@ const Login = () => {
   });
   const navigate = useNavigate();
   const { fetchUserDetails } = useContext(Context);
-  const [loginUser,setLoginUser] = useState()
   const [users, setUsers] = useState([]);
   
   
@@ -59,8 +58,6 @@ const Login = () => {
 
     // Validate if the user exists
     const foundUser = users.find(user => user.email === data.email);
-
-    setLoginUser(foundUser)
 
     console.log(foundUser)
     
@@ -126,9 +123,7 @@ const Login = () => {
                   onChange={handleOnChange}
                 />
                 <div className='cursor-pointer text-xl' onClick={() => setShowPassword((prev) => !prev)}>
-                  <span>
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
                 </div>
               </div>
               <Link to='/forgot-password' className='block w-fit ml-auto text-sm hover:underline hover:text-red-600'>

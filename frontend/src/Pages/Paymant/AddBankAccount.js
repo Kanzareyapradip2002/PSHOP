@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import SummaryApi from '../../common';
-import { Link, useParams } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import Logo from '../../assest/p-shop.png'
 
 const AddBankAccount = () => {
   const [allAccounts, setAllAccounts] = useState([]);
@@ -9,8 +10,8 @@ const AddBankAccount = () => {
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState({ Account: "" });
   const [imageData, setImageData] = useState({
-    Bank: "",
     AccountHolderPhoto: "",
+    Bank: "",
     Date: "",
     Branch: "",
     BranchCode: "",
@@ -19,15 +20,10 @@ const AddBankAccount = () => {
     EmailId: "",
     AccountType: "",
     AccountNumber: "",
-    ProcuctCode: "",  // Make sure the initial state has this field
   });
 
   const [searchAccount, setSearchAccount] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const Codes  = useParams();  // Destructure 'Code' from useParams()
-
-  const ProdactCode = Codes.Codes // Log Code to check the value
-  localStorage.setItem("AddtoCart",ProdactCode)
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setAccount((prev) => ({
@@ -35,18 +31,18 @@ const AddBankAccount = () => {
       [name]: value,
     }));
   };
-  
+
   const filterAccounts = useCallback((accounts) => {
     if (account.Account) {
       const filtered = accounts.filter((acc) =>
         acc.AccountNumber.includes(account.Account)
-    );
-    setFilteredAccounts(filtered);
-  } else {
+      );
+      setFilteredAccounts(filtered);
+    } else {
       setFilteredAccounts(accounts);
     }
   }, [account.Account]);
-  
+
   const fetchAllBankAccount = useCallback(async () => {
     setLoading(true);
     try {
@@ -54,7 +50,7 @@ const AddBankAccount = () => {
         method: SummaryApi.GetBankAccount.method,
         credentials: 'include',
       });
-      
+
       const dataResponse = await response.json();
 
       if (dataResponse.success) {
@@ -73,11 +69,11 @@ const AddBankAccount = () => {
   useEffect(() => {
     fetchAllBankAccount();
   }, [fetchAllBankAccount]);
-  
+
   useEffect(() => {
     filterAccounts(allAccounts);
   }, [account.Account, allAccounts, filterAccounts]);
-  
+
   // This useEffect will update imageData when filteredAccounts change
   useEffect(() => {
     if (filteredAccounts.length > 0) {
@@ -93,11 +89,10 @@ const AddBankAccount = () => {
         EmailId: accountData.EmailId || "",
         AccountType: accountData.AccountType || "",
         AccountNumber: accountData.AccountNumber || "",
-        ProcuctCode:ProdactCode, // Use Code from useParams() for ProcuctCode
       });
     }
-  }, [filteredAccounts, ProdactCode]);  // Add Code as a dependency to this effect
-  
+  }, [filteredAccounts]);  // Add Code as a dependency to this effect
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setSearchAccount(true);
@@ -193,105 +188,110 @@ const AddBankAccount = () => {
       </form>
 
       {loading ? (
-        <p className="text-center mt-6">Loading...</p>
+        <p>
+          <div class="ring">
+            <img src={Logo} alt='logo' className='mt-3' />
+            <span></span>
+          </div>
+        </p>
       ) : (
-        <ul className="mt-6">
-          {filteredAccounts.length > 0 ? (
-            filteredAccounts.map((account, index) => (
-              <li key={index} className="bg-white p-4 mb-6 rounded-lg shadow-lg">
-                {searchAccount && (
-                  <div className="space-y-6">
-                    <h1 className="text-center text-xl font-bold mb-4">Account Details</h1>
+      <ul className="mt-6">
+        {filteredAccounts.length > 0 ? (
+          filteredAccounts.map((account, index) => (
+            <li key={index} className="bg-white p-4 mb-6 rounded-lg shadow-lg">
+              {searchAccount && (
+                <div className="space-y-6">
+                  <h1 className="text-center text-xl font-bold mb-4">Account Details</h1>
 
-                    <div className="bg-orange-400 p-2 rounded-md shadow-lg mb-4">
-                      <p className="font-semibold ml-2">1. Bank and Date</p>
+                  <div className="bg-orange-400 p-2 rounded-md shadow-lg mb-4">
+                    <p className="font-semibold ml-2">1. Bank and Date</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-6">
+                    <div className="bg-white p-2 w-[150px] rounded-md shadow-lg">
+                      <p className="font-semibold">Bank Name:</p>
+                      <img src={account.Bank} alt="Bank Logo" className="h-16 w-16" />
                     </div>
 
-                    <div className="flex flex-wrap gap-6">
-                      <div className="bg-white p-2 w-[150px] rounded-md shadow-lg">
-                        <p className="font-semibold">Bank Name:</p>
-                        <img src={account.Bank} alt="Bank Logo" className="h-16 w-16" />
-                      </div>
-
-                      <div className="bg-white p-4 w-[150px] rounded-md shadow-lg">
-                        <p className="font-semibold">Bank Branch:</p>
-                        <p>{account.Branch}</p>
-                      </div>
-
-                      <div className="bg-white p-4 w-[150px] rounded-md shadow-lg">
-                        <p className="font-semibold">Branch Code:</p>
-                        <p>{account.BranchCode}</p>
-                      </div>
-
-                      <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
-                        <p className="font-semibold">Account Created Date:</p>
-                        <p>{account.Date}</p>
-                      </div>
-
-                      <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
-                        <p className="font-semibold">Account Type:</p>
-                        <p>{account.AccountType}</p>
-                      </div>
-                      <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
-                        <p className="font-semibold">Account Number:</p>
-                        <p>{account.AccountNumber}</p>
-                      </div>
+                    <div className="bg-white p-4 w-[150px] rounded-md shadow-lg">
+                      <p className="font-semibold">Bank Branch:</p>
+                      <p>{account.Branch}</p>
                     </div>
 
-                    {/* Personal Details Section */}
-                    <div className="bg-orange-400 p-2 rounded-md shadow-lg mt-6">
-                      <p className="font-semibold ml-2">2. Personal Details</p>
+                    <div className="bg-white p-4 w-[150px] rounded-md shadow-lg">
+                      <p className="font-semibold">Branch Code:</p>
+                      <p>{account.BranchCode}</p>
                     </div>
 
-                    <div className="flex flex-wrap gap-6 mt-4">
-                      <div className="bg-white p-2 w-[300px] rounded-md shadow-lg">
-                        <p className="font-semibold">Account Holder Name:</p>
-                        <p>{account.AccountHolderName}</p>
-                      </div>
-
-                      <div className="bg-white p-4 flex justify-center items-center flex-col w-[300px] rounded-md shadow-lg">
-                        <p className="font-semibold">Account Holder Photo:</p>
-                        <img src={account.AccountHolerPhoto} alt="Account Holder" className="w-32 h-32 rounded-full shadow-xl mt-2" />
-                      </div>
+                    <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
+                      <p className="font-semibold">Account Created Date:</p>
+                      <p>{account.Date}</p>
                     </div>
 
-                    {/* Contact Details */}
-                    <div className="bg-orange-400 p-2 rounded-md shadow-lg mt-6">
-                      <p className="font-semibold ml-2">3. Contact Details</p>
+                    <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
+                      <p className="font-semibold">Account Type:</p>
+                      <p>{account.AccountType}</p>
                     </div>
-
-                    <div className="flex flex-wrap gap-6 mt-4">
-                      <div className="bg-white p-4 w-[250px] rounded-md shadow-lg">
-                        <p className="font-semibold">Mobile No:</p>
-                        <p>{account.MobileNo}</p>
-                      </div>
-                      <div className="bg-white p-4 rounded-md shadow-lg">
-                        <p className="font-semibold">Email Id:</p>
-                        <p>{account.EmailId}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <div className='flex justify-center cursor-pointer font-semibold text-white items-center gap-3 ' >
-                        <Link to={"/User-Wallet/:Code"} >
-                          <p className='bg-red-600 p-3 rounded-lg shadow-lg hover:bg-red-700 '>Back</p>
-                        </Link>
-                        <p
-                          className={`bg-red-600 p-3 rounded-lg shadow-lg ${isClicked ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-700'}`}
-                          onClick={!isClicked ? handleSubmitAccount : null}
-                          disabled={isClicked}
-                        >
-                          Confirm Account
-                        </p>
-                      </div>
+                    <div className="bg-white p-4 w-[190px] rounded-md shadow-lg">
+                      <p className="font-semibold">Account Number:</p>
+                      <p>{account.AccountNumber}</p>
                     </div>
                   </div>
-                )}
-              </li>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">No accounts found</p>
-          )}
-        </ul>
+
+                  {/* Personal Details Section */}
+                  <div className="bg-orange-400 p-2 rounded-md shadow-lg mt-6">
+                    <p className="font-semibold ml-2">2. Personal Details</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-6 mt-4">
+                    <div className="bg-white p-2 w-[300px] rounded-md shadow-lg">
+                      <p className="font-semibold">Account Holder Name:</p>
+                      <p>{account.AccountHolderName}</p>
+                    </div>
+
+                    <div className="bg-white p-4 flex justify-center items-center flex-col w-[300px] rounded-md shadow-lg">
+                      <p className="font-semibold">Account Holder Photo:</p>
+                      <img src={account.AccountHolerPhoto} alt="Account Holder" className="w-32 h-32 rounded-full shadow-xl mt-2" />
+                    </div>
+                  </div>
+
+                  {/* Contact Details */}
+                  <div className="bg-orange-400 p-2 rounded-md shadow-lg mt-6">
+                    <p className="font-semibold ml-2">3. Contact Details</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-6 mt-4">
+                    <div className="bg-white p-4 w-[250px] rounded-md shadow-lg">
+                      <p className="font-semibold">Mobile No:</p>
+                      <p>{account.MobileNo}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-md shadow-lg">
+                      <p className="font-semibold">Email Id:</p>
+                      <p>{account.EmailId}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className='flex justify-center cursor-pointer font-semibold text-white items-center gap-3 ' >
+                      <Link to={"/User-Wallet/:Code"} >
+                        <p className='bg-red-600 p-3 rounded-lg shadow-lg hover:bg-red-700 '>Back</p>
+                      </Link>
+                      <p
+                        className={`bg-red-600 p-3 rounded-lg shadow-lg ${isClicked ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-700'}`}
+                        onClick={!isClicked ? handleSubmitAccount : null}
+                        disabled={isClicked}
+                      >
+                        Confirm Account
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No accounts found</p>
+        )}
+      </ul>
       )}
     </div>
   );

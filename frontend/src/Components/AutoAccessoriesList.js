@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
-import BannerProduct from '../Pages/Banner/BannerProduct';
-import { AiFillOpenAI, AiOutlineLine } from 'react-icons/ai';
 import HorizontalCardProduct from './HorizontalCardProduct';
+import CarouselHome from '../Pages/Banner/CarouselHome';
 
 const AutoAccessoriesList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
@@ -33,8 +32,8 @@ const AutoAccessoriesList = () => {
 
     return (
         <>
-            <div className='container mx-3 p-3'>
-                <div className='flex items-center mr-[-258px]  gap-8 flex-row overflow-scroll scrollbar-none'>
+            <div className='container p-3'>
+                <div className='flex items-center gap-8 flex-row overflow-scroll scrollbar-none sm:mr-[-16px] lg:mr-[-140px]'>
                     {loading ? (
                         categoryLoading.map((_, index) => (
                             <div
@@ -46,37 +45,27 @@ const AutoAccessoriesList = () => {
                         ))
                     ) : (
                         categoryProduct.map((product) => {
-                            const productImage = product?.products[0]?.productImage || '/path/to/default/image.jpg'; // Fallback image
+                            const productImage = product?.products[0]?.productImage || '/path/to/default/image.jpg';
                             const productName = product?.category || 'Unknown Product';
 
-                            // Ensure product.id is available and unique
                             const key = product.id || `${productName}-${Math.random()}`;
 
                             return (
-                                <>
-                                    <Link to={`/Category/${productName}`} className='flex flex-col items-center cursor-pointer' key={key}>
-                                        <div className='w-16 h-16 rounded-full overflow-hidden p-3 bg-slate-200 flex items-center justify-center'>
-                                            <img className='h-full object-cover mix-blend-multiply hover:scale-150 transition-all' src={productImage} alt={productName} />
-                                        </div>
-                                        <p className='text-center mt-2 capitalize font-semibold'>{productName}</p>
-                                    </Link>
-                                </>
+                                <Link to={`/Category/${productName}`} className='flex flex-col items-center cursor-pointer' key={key}>
+                                    <div className='w-16 h-16 rounded-full overflow-hidden p-3 bg-slate-200 flex items-center justify-center'>
+                                        <img className='h-full object-cover mix-blend-multiply hover:scale-150 transition-all' src={productImage} alt={productName} />
+                                    </div>
+                                    <p className='text-center mt-2 capitalize font-semibold'>{productName}</p>
+                                </Link>
                             );
                         })
                     )}
                 </div>
             </div>
-            <BannerProduct />
-            <div className='h-full w-full bg-slate-50 shadow-md p-3 mt-[-100px]'>
-                <h2 className='text-2xl flex font-bold ml-[500px] '>
-                    <AiOutlineLine className='mt-1' />
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    Tyres
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    <AiOutlineLine className='mt-1' />
-                </h2>
-                <HorizontalCardProduct category={"tyres"} heading={"Top's Tyres"} />
+            <div className=' overflow-y-hidden'>
+                <CarouselHome />
             </div>
+            <HorizontalCardProduct category={"tyres"} heading={"Top's Tyres"} />
         </>
     );
 };

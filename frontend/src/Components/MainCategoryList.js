@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
-import BannerProduct from '../Pages/Banner/BannerProduct';
 import HorizontalCardProduct from './HorizontalCardProduct';
+import CarouselHome from '../Pages/Banner/CarouselHome';
 
 
 const MainCategoryList = () => {
@@ -32,7 +32,7 @@ const MainCategoryList = () => {
     return (
         <>
             <div className='container p-3'>
-                <div className='flex items-center mr-[-240px] justify-between gap-8 flex-row overflow-scroll scrollbar-none'>
+                <div className='flex items-center justify-between gap-8 flex-row overflow-scroll scrollbar-none sm:mr-[-140px] lg:mr-[-240px]'>
                     {loading ? (
                         categoryLoading.map((_, index) => (
                             <div
@@ -66,11 +66,19 @@ const MainCategoryList = () => {
                     )}
                 </div>
             </div>
-
-            <BannerProduct />
-            <div className=' mt-[-140px]'>
+            <CarouselHome/>
+            <div>
                 <HorizontalCardProduct category={"airpodes"} heading={"Top's Airpodes"} />
                 <HorizontalCardProduct category={"printers"} heading={"Top's Printers"} />
+                <HorizontalCardProduct category={"tyres"} heading={"Top's Tyres"} />
+                <HorizontalCardProduct category={"shampoo"} heading={"Top's Shampoo"} />
+                <HorizontalCardProduct category={"jeans"} heading={"Top's Jeans"} />
+                <HorizontalCardProduct category={"sweet"} heading={"Top's Sweet"} />
+                <HorizontalCardProduct category={"detergent"} heading={"Top's Detergent"} />
+                <HorizontalCardProduct category={"gasstoves"} heading={"Top's Gasstoves"} />
+                <HorizontalCardProduct category={"tablets"} heading={"Top's Tablets"} />
+                <HorizontalCardProduct category={"bicycle"} heading={"Top's Bicycle"} />
+                <HorizontalCardProduct category={"musicinstruments"} heading={"Top's Musicinstruments"} />
             </div>
 
         </>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import logo from '../assest/p-shop.png';
 import { MdOutlineSearch } from "react-icons/md";
 import { FaUserTie, FaCartPlus } from "react-icons/fa";
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {useSelector } from 'react-redux';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ const Header = () => {
     const [menuDisplay, setMenuDisplay] = useState(false);
     const [allAddToCart, setAllAddToCart] = useState([]);
     const verificationCodes = user?.verificationCode;
+
     useEffect(() => {
         if (verificationCodes) {
             const fetchAllUsers = async () => {
@@ -42,24 +43,22 @@ const Header = () => {
     }, [verificationCodes]);
 
     const handleLogout = async () => {
-        // Clear user data from localStorage
+        // Remove the login-related data from localStorage
         localStorage.removeItem("loginUserEmail");
         localStorage.removeItem("loginUsername");
         localStorage.removeItem("loginUserpassword");
-
-        // Optional: You can manually clear any other app state or session if necessary
-
-        // Force a page refresh (reload)
+    
+        // Refresh the page to reflect the logout
         window.location.reload();
     };
-
+    
 
     return (
         <header className='h-16 shadow-md bg-white fixed w-full z-40'>
             <div className='h-full mx-auto flex items-center px-4 justify-between'>
                 <div>
                     <Link to="/">
-                        <img className='h-[90px] w-[120px]' src={logo} alt='Pixel Shop Logo' />
+                        <img className='h-[60px] w-[60px] md:h-[90px] md:w-[120px]' src={logo} alt='Pixel Shop Logo' />
                     </Link>
                 </div>
                 <div className='lg:flex hidden items-center w-full justify-between max-w-sm border focus-within:shadow-md rounded-full pl-2'>
@@ -75,7 +74,7 @@ const Header = () => {
                                 {user?.profilePic ? (
                                     <img src={user?.profilePic} className='w-10 h-10 rounded-full' alt={user?.name} />
                                 ) : (
-                                    <FaUserTie />
+                                    <FaUserTie className='w-10 h-10 rounded-full'/>
                                 )}
                             </div>
                         )}
@@ -129,7 +128,7 @@ const Header = () => {
                     {user?._id && user?.role === ROLE.GENERAL && (
                         <Link to={"/AddToCart"} className='text-3xl relative'>
                             <FaCartPlus />
-                            <div className='bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute top-2 right-1'>
+                            <div className='bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-2'>
                                 <p className='text-sm'>{allAddToCart.length}</p>
                             </div>
                         </Link>

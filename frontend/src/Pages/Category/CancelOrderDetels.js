@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';  // Assuming you are using react-toastif
 import SummaryApi from '../../common';
 import { useParams } from 'react-router-dom';
 import displayINRCurrency from '../../helpers/displayCurrency';
+import Logo from '../../assest/p-shop.png';  // Simple loading state
 
 const CancelOrderDetels = () => {
     const [allAddToCart, setAllAddToCart] = useState([]);
@@ -43,7 +44,12 @@ const CancelOrderDetels = () => {
     }, [verificationCodes]);
 
     if (loading) {
-        return <div>Loading...</div>;  // Simple loading state
+        return <p>
+                    <div class="ring">
+                        <img src={Logo} alt='logo' className='mt-3' />
+                        <span></span>
+                    </div>
+                </p>
     }
 
     if (error) {

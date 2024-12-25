@@ -9,25 +9,25 @@ import UserAddress from '../UserAddress';
 
 const PlaceOrderPage = () => {
   const location = useLocation();
-  const { product } = location.state || {}; // Fallback for missing product
+  const { productDetails } = location.state || {}; // Fallback for missing product
 
   // Initialize Product Details
-  const productImage = product?.productImage || '/path/to/placeholder-image.jpg';
-  const ProductName = product?.productName || 'N/A';
-  const ProductBrand = product?.brandName || 'N/A';
-  const ProductCategory = product?.category || 'N/A';
-  const ProductDescription = product?.description || 'No description available.';
-  const ProductPrice = parseFloat(product?.price || 0);
-  const ProductSellingPrice = parseFloat (product?.selling || 0);
-  const Code = parseFloat(product?.Code)
+  const productImage = productDetails?.productImage || '/path/to/placeholder-image.jpg';
+  const ProductName = productDetails?.productName || 'N/A';
+  const ProductBrand = productDetails?.brandName || 'N/A';
+  const ProductCategory = productDetails?.category || 'N/A';
+  const ProductDescription = productDetails?.description || 'No description available.';
+  const ProductPrice = parseFloat(productDetails?.price || 0);
+  const ProductSellingPrice = parseFloat(productDetails?.selling || 0);
+  const Code = parseFloat(productDetails?.Code)
 
 
   // Calculate Discount
-  const DiscountPrice = product?.price && product?.selling
-    ? product?.price - product?.selling
+  const DiscountPrice = productDetails?.price && productDetails?.selling
+    ? productDetails?.price - productDetails?.selling
     : 0;
-  const DiscountPercentage = product?.price && product?.selling
-    ? ((product?.price - product?.selling) / product?.price * 100).toFixed(2)
+  const DiscountPercentage = productDetails?.price && productDetails?.selling
+    ? ((productDetails?.price - productDetails?.selling) / productDetails?.price * 100).toFixed(2)
     : 0;
   const Discount = `${DiscountPercentage > 0 ? DiscountPercentage : 0}%`;
 
@@ -50,7 +50,7 @@ const PlaceOrderPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [addressVisible, setAddressVisible] = useState(false);
   const [allAddresses, setAllAddresses] = useState([]);
-  
+
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (value >= 1) {
@@ -89,7 +89,7 @@ const PlaceOrderPage = () => {
     if (user) {
       fetchAllAddresses();
     }
-  }, [user]); 
+  }, [user]);
 
   const handleAddToCart = () => {
     if (!user || !userAddress) {
@@ -99,9 +99,9 @@ const PlaceOrderPage = () => {
 
   return (
     <div className="mt-5 ml-3 h-full rounded mr-3 mb-6">
-      <div className="flex gap-7">
+      <div className="flex flex-col md:flex-row gap-7">
         {/* Product Image and Quantity Selection */}
-        <div className="h-auto w-[350px] bg-slate-200">
+        <div className="h-auto w-full md:w-[350px] bg-slate-200">
           <div className="max-h-full max-w-full mt-14 ml-6">
             <img
               src={productImage}
@@ -127,50 +127,48 @@ const PlaceOrderPage = () => {
         </div>
 
         {/* Product Details */}
-        <div className="h-auto w-[850px] bg-slate-200">
+        <div className="h-auto w-full md:w-[850px] bg-slate-200">
           <div className="p-4">
             <div className="bg-slate-50 rounded-lg p-4">
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Product Name :</p>
                 {ProductName}
               </div>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Product Category :</p>
                 {ProductCategory}
               </div>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Product Brand :</p>
                 {ProductBrand}
               </div>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Discount :</p>
                 <p className={`${DiscountPercentage < 50 ? 'text-red-500' : 'text-green-500'}`}>
                   {Discount}
                 </p>
               </div>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Product Price :</p>
-                <p className="ml-[80px]">{displayINRCurrency(ProductPrice)}</p>
+                <p>{displayINRCurrency(ProductPrice)}</p>
               </div>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Discount Price :</p>
-                <p className="ml-[75px]">{displayINRCurrency(DiscountPrice)}</p>
+                <p>{displayINRCurrency(DiscountPrice)}</p>
               </div>
-              <p className="mt-[-15px] ml-48">_____________</p>
-              <div className="flex flex-row gap-2 capitalize">
+              <div className="flex flex-col md:flex-row gap-2 capitalize">
                 <p className="font-semibold">Product Selling Price :</p>
-                <p className="ml-[28px]">{displayINRCurrency(ProductSellingPrice)}</p>
+                <p className="">{displayINRCurrency(ProductSellingPrice)}</p>
               </div>
               {deliveryChargePrice > 0 && (
-                <div className="flex flex-row gap-2 capitalize">
+                <div className="flex flex-col md:flex-row gap-2 capitalize">
                   <p className="font-semibold">Delivery Charge :</p>
-                  <p className="ml-[81px]">{displayINRCurrency(deliveryChargePrice)}</p>
+                  <p>{displayINRCurrency(deliveryChargePrice)}</p>
                 </div>
               )}
-              <p className="mt-[-15px] ml-48">_____________</p>
-              <div className="flex flex-row gap-2 capitalize font-bold">
+              <div className="flex flex-col md:flex-row gap-2 capitalize font-bold">
                 <p className="font-bold">Total Price :</p>
-                <p className="ml-[92px]">{displayINRCurrency(TotalPrice)}</p>
+                <p>{displayINRCurrency(TotalPrice)}</p>
               </div>
             </div>
             <div className="bg-slate-50 rounded-lg mt-3 p-3">

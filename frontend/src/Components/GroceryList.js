@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
 import { Link } from 'react-router-dom';
-import BannerProduct from '../Pages/Banner/BannerProduct';
 import HorizontalCardProduct from './HorizontalCardProduct';
-import { AiFillOpenAI, AiOutlineLine } from 'react-icons/ai';
+import CarouselHome from '../Pages/Banner/CarouselHome';
 
 const GroceryList = () => {
     const [categoryProduct, setCategoryProduct] = useState([]);
@@ -33,8 +32,8 @@ const GroceryList = () => {
 
     return (
         <>
-            <div className='container mx-3 p-3'>
-                <div className='flex items-center mr-[-258px]  gap-8 flex-row overflow-scroll scrollbar-none'>
+            <div className='container p-3'>
+                <div className='flex items-center  gap-8 flex-row overflow-scroll scrollbar-none sm:mr-[-16px] lg:mr-[-140px]'>
                     {loading ? (
                         categoryLoading.map((_, index) => (
                             <div
@@ -63,17 +62,10 @@ const GroceryList = () => {
                     )}
                 </div>
             </div>
-            <BannerProduct />
-            <div className='h-full w-full bg-slate-50 shadow-md p-3 mt-[-100px]'>
-                <h2 className='text-2xl flex font-bold ml-[500px] '>
-                    <AiOutlineLine className='mt-1' />
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    Detergent
-                    <AiFillOpenAI className='text-4xl text-orange-300' />
-                    <AiOutlineLine className='mt-1' />
-                </h2>
-                <HorizontalCardProduct category={"detergent"} heaing={"Top's Detergent"} />
+            <div className=' overflow-y-hidden'>
+                <CarouselHome />
             </div>
+            <HorizontalCardProduct category={"detergent"} heaing={"Top's Detergent"} />
         </>
     );
 };

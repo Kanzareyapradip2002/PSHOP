@@ -4,11 +4,12 @@ async function WIderoleHisterey(req, res) {
     try {
         const {
             AccountNumber,
-            Balance, } = req.body;
+            Balance,Code } = req.body;
 
         const payload = {
             AccountNumber,
-            Balance
+            Balance,
+            Code
         };
 
         const imageData = new WidroleHisteryModel(payload);

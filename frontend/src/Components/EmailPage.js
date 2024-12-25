@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import loginicon from '../assest/signin.gif'; 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,6 +13,7 @@ const EmailPage = () => {
     });
     const [error, setError] = useState('');
     const [generatedOtp, setGeneratedOtp] = useState(null);
+    const [timer, setTimer] = useState(0); // Track countdown time
     const navigate = useNavigate();
 
     // Handle input change
@@ -42,6 +43,7 @@ const EmailPage = () => {
                     setGeneratedOtp(otpCode); // Store the generated OTP
                     setSubmitOtp(true);
                     setData((prevData) => ({ ...prevData, otp: '' }));
+                    setTimer(120); // Start a 2-minute timer
                     toast.success('OTP sent to your email!');
                 }
             } catch (error) {
@@ -57,6 +59,27 @@ const EmailPage = () => {
                 setError('Invalid OTP. Please try again.');
             }
         }
+    };
+
+    // Countdown timer effect
+    useEffect(() => {
+        let interval;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+        } else {
+            clearInterval(interval); // Stop timer when it reaches 0
+        }
+
+        return () => clearInterval(interval); // Cleanup on component unmount or timer stop
+    }, [timer]);
+
+    // Format the remaining time in mm:ss format
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
     };
 
     return (
@@ -102,8 +125,15 @@ const EmailPage = () => {
                             type='submit'
                             className='bg-red-600 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-4 hover:bg-red-700'
                         >
-                            {submitOtp ? 'Submit OTP' : 'Send OTP'}
+                            {(submitOtp ? 'Submit OTP' : 'Send OTP')}
                         </button>
+                        <div className='ml-28'>
+                          {
+                            timer !== 0 && (
+                               `Otp Expierd :${formatTime(timer)}`
+                            )
+                          }  
+                        </div>
                     </form>
                 </div>
             </div>

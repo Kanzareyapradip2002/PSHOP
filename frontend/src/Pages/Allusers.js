@@ -3,7 +3,6 @@ import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { MdEditOff, MdModeEdit } from "react-icons/md";
-import ChangeUserRole from '../Components/ChangeUserRole';
 import ROLE from '../common/role';
 import { useNavigate } from 'react-router-dom';
 import SeandSecreatKEY from '../Components/SeandSecreatKEY';
@@ -45,52 +44,54 @@ const AllUsers = () => {
 
     return (
         <div className='bg-white pb-4'>
-            <table className='w-full userTable'>
-                <thead>
-                    <tr className='bg-black text-white'>
-                        <th>Sr.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Created Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {allUsers.map((user, index) => (
-                        <tr key={user._id}>
-                            <td>{index + 1}</td>
-                            <td>{user.name}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role}</td>
-                            <td>{moment(user.createdAt).format('LL')}</td>
-                            <td>
-                                {user.role === ROLE.GENERAL ? (
-                                    <button onClick={sendMessage} aria-label="Send Message">
-                                        <div className={buttonStyle}>
-                                            <MdEditOff />
-                                        </div>
-                                    </button>
-                                ) : (
-                                    <button
-                                        className={buttonStyle}
-                                        onClick={() => {
-                                            if (!isSendingKey) setUserDetails(user);
-                                            setIsSendingKey(!isSendingKey);
-                                        }}
-                                        aria-label={isSendingKey ? "Edit User Role" : "Send Secret Key"}
-                                    >
-                                        <div className={buttonStyle}>
-                                            {isSendingKey ? <MdModeEdit /> : <MdEditOff />}
-                                        </div>
-                                    </button>
-                                )}
-                            </td>
+            <div className="overflow-x-auto">
+                <table className='min-w-full table-auto'>
+                    <thead>
+                        <tr className='bg-black text-white'>
+                            <th className="px-4 py-2 text-left">Sr.</th>
+                            <th className="px-4 py-2 text-left">Name</th>
+                            <th className="px-4 py-2 text-left">Email</th>
+                            <th className="px-4 py-2 text-left">Role</th>
+                            <th className="px-4 py-2 text-left">Created Date</th>
+                            <th className="px-4 py-2 text-left">Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            
+                    </thead>
+                    <tbody>
+                        {allUsers.map((user, index) => (
+                            <tr key={user._id} className="border-t">
+                                <td className="px-4 py-2">{index + 1}</td>
+                                <td className="px-4 py-2">{user.name}</td>
+                                <td className="px-4 py-2">{user.email}</td>
+                                <td className="px-4 py-2">{user.role}</td>
+                                <td className="px-4 py-2">{moment(user.createdAt).format('LL')}</td>
+                                <td className="px-4 py-2">
+                                    {user.role === ROLE.GENERAL ? (
+                                        <button onClick={sendMessage} aria-label="Send Message">
+                                            <div className={buttonStyle}>
+                                                <MdEditOff />
+                                            </div>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className={buttonStyle}
+                                            onClick={() => {
+                                                if (!isSendingKey) setUserDetails(user);
+                                                setIsSendingKey(!isSendingKey);
+                                            }}
+                                            aria-label={isSendingKey ? "Edit User Role" : "Send Secret Key"}
+                                        >
+                                            <div className={buttonStyle}>
+                                                {isSendingKey ? <MdModeEdit /> : <MdEditOff />}
+                                            </div>
+                                        </button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
             {isSendingKey && (
                 <SeandSecreatKEY
                     onClose={() => setIsSendingKey(false)}

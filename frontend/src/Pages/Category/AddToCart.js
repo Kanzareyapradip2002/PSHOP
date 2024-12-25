@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import SummaryApi from '../../common';
 import displayINRCurrency from '../../helpers/displayCurrency';
 import { Link } from 'react-router-dom';
+import Logo from '../../assest/p-shop.png'
 
 const AddToCart = () => {
     const [allAddToCart, setAllAddToCart] = useState([]);
@@ -87,7 +88,12 @@ const AddToCart = () => {
     }, [allAddToCart]);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <p>
+            <div class="ring">
+                <img src={Logo} alt='logo' className='mt-3' />
+                <span></span>
+            </div>
+        </p>
     }
 
     if (error) {
@@ -96,7 +102,7 @@ const AddToCart = () => {
 
     return (
         <div>
-            <ul className="flex flex-wrap">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
                 {allAddToCart.length > 0 ? (
                     allAddToCart.map((item, index) => {
                         const productQuantity = parseFloat(item?.Num);
@@ -106,105 +112,90 @@ const AddToCart = () => {
                         const TotalPrice = productPrice * productQuantity;
                         const ProductSellingPrice = TotalPrice - DiscountPrice;
                         const CurrentTotalPrice = ProductSellingPrice + DeliveryChargePrice;
-                        const handelPayError = () =>{
-                            toast.error("This Order Is Payment Conformed ")
-                        }
+                        const handelPayError = () => {
+                            toast.error("This Order Is Payment Conformed ");
+                        };
+
                         return (
-                            <li key={index} className="flex justify-center items-center ml-7  pb-3 pt-4">
-                                <div className="bg-white p-3 rounded shadow-lg cursor-pointer">
-                                    <div className="w-[550px] h-[300px] pb-5 overflow-y-scroll scrollbar-none">
-                                        <div className='bg-slate-200 ml-[355px] mt-5 h-48 w-48 rounded-lg'>
-                                            {item?.ProductImage ? (
-                                                <img src={item?.ProductImage} alt="Product" className='mix-blend-multiply p-4 pt-2 w-40 ml-4 mt-4' />
-                                            ) : (
-                                                <p>No image available</p>
-                                            )}
+                            <li key={index} className="bg-white mt-3 p-4 rounded shadow-lg flex flex-col justify-between h-72 overflow-y-scroll scrollbar-none ">
+                                <div className="relative  justify-center items-center">
+                                    <div className="w-full h-64 bg-slate-200 rounded-lg overflow-hidden">
+                                        {item?.ProductImage ? (
                                             <div>
-                                                {
-                                                    item?.Confirmation === "Confirmed" ? (
-                                                        <div className='mt-5  text-green-600 font-semibold text-lg ml-12'>{item?.Confirmation}</div>
-                                                    ) : (
-                                                        <div className='mt-5 text-red-600 font-semibold text-lg ml-12'>{item?.Confirmation}</div>
-                                                    )
-                                                }
+                                                <img src={item?.ProductImage} alt="Product" className="w-50 h-60 mt-2 mix-blend-multiply ml-5" />
                                             </div>
-                                        </div>
-
-                                        <div className='mt-[-200px] ml-2 w-[270px]'>
-                                            <div className='flex font-bold'>ProductName: <p className='ml-2 font-semibold text-ellipsis line-clamp-2'>{item?.ProductName}</p></div>
-                                            <div className='flex font-bold'>ProductBrand: <p className='ml-2 font-semibold capitalize'>{item?.ProductBrand}</p></div>
-                                            <div className='flex font-bold'>ProductCategory: <p className='ml-2 font-semibold capitalize'>{item?.ProductCategory}</p></div>
-                                            <div className='flex font-bold'>Discount: <p className='ml-2 font-semibold capitalize'>{item?.Discount}</p></div>
-                                            <div className='flex font-bold'>ProductPrice: <p className='ml-14 font-semibold'>{displayINRCurrency(item?.ProductPrice)}</p></div>
-                                            <div className='flex font-bold'>ProductQuantity: <p className='ml-20 font-semibold'>{item?.Num}</p></div>
-                                            <div className='ml-36 mt-[-19px]'>______________</div>
-                                            <div className='flex font-bold'>TotalPrice: <p className='ml-20 font-semibold'>{displayINRCurrency(TotalPrice)}</p></div>
-                                            <div className='flex font-bold'>DiscountPrice: <p className='ml-14 font-semibold '>-{displayINRCurrency(DiscountPrice)}</p></div>
-                                            <div className='ml-36 mt-[-19px]'>______________</div>
-                                            <div className='flex font-bold'>ProductSellingPrice: <p className='ml-2 font-semibold '>{displayINRCurrency(ProductSellingPrice)}</p></div>
-                                            <div className='flex font-bold'>DeliveryChargePrice: <p className='ml-2 font-semibold '>+{displayINRCurrency(DeliveryChargePrice)}</p></div>
-                                            <div className='ml-36 mt-[-19px]'>______________</div>
-                                            <div className='flex font-bold'>CurrentTotalPrice: <p className='ml-8 font-semibold '>{displayINRCurrency(CurrentTotalPrice)}</p></div>
-                                        </div>
-                                        <div className='bg-slate-200 h-[150px] w-[530px] ml-2 rounded overflow-y-scroll scrollbar-none'>
-                                            <p className='font-semibold ml-1 '>Description</p>
-                                            <p className='ml-2'>
-                                                {item.ProductDescription}
-                                            </p>
-                                        </div>
-                                        <div className='bg-slate-200 h-[180px] w-[530px] mt-3 ml-2 rounded overflow-y-scroll scrollbar-none'>
-                                            <p className='font-semibold ml-1 '>Address:</p>
-                                            <div className='ml-2 font-semibold flex gap-3'>
-                                                <p>1.Name : {item.FullName}</p>
-                                                <p>2.Phone Number : {item.PhoneNumber}</p>
-                                            </div>
-                                            <div className='ml-2 mt-2 font-semibold flex gap-3'>
-                                                <p>3.Alt Phone Number : {item.AltPhoneNumber}</p>
-                                                <p>4.Pincode : {item.Pincode}</p>
-                                            </div>
-                                            <div className='ml-2 mt-2 font-semibold flex gap-3'>
-                                                <p>5.State : {item.State}</p>
-                                                <p>6.City : {item.City}</p>
-
-                                            </div>
-                                            <div className='ml-2 mt-2 font-semibold flex gap-3'>
-                                                <p>7.HouseNo : {item.HouseNo}</p>
-                                            </div>
-                                            <div className='ml-2 mt-2 font-semibold flex gap-3'>
-                                                <p>8.RoadName : {item.RoadName}</p>
-                                            </div>
-
-                                        </div>
+                                        ) : (
+                                            <p>No image available</p>
+                                        )}
                                     </div>
-                                    <div className='mb-[-12px] pb-3'>
-                                        {
-                                            item?.Confirmation === "Confirmed" ? (
-                                                <Link onClick={handelPayError}>
-                                                    <button className='border border-red-600 w-[280px] h-[50px] rounded-lg font-bold hover:bg-red-600 hover:text-white'>Pay</button>
-                                                </Link>
-                                            ) : (
-                                                <Link to={`/User-Wallet/${item._id}`}>
-                                                    <button className='border border-red-600 w-[280px] h-[50px] rounded-lg font-bold hover:bg-red-600 hover:text-white'>Pay</button>
-                                                </Link>
-                                            )
-                                        }
-                                        <button
-                                            className='border border-red-600 ml-3 w-[280px] h-[50px] rounded-lg font-bold hover:bg-red-600 hover:text-white'
-                                            onClick={() => deleteAddToCart(item?._id)}
-                                        >
-                                            Delete
-                                        </button>
+
+                                    <div className={`absolute top-4 right-4 text-lg font-semibold ${item?.Confirmation === "Confirmed" ? 'text-green-600' : 'text-red-600'}`}>
+                                        {item?.Confirmation}
                                     </div>
+                                </div>
+
+                                <div className="mt-4 flex flex-col">
+                                    <div className="font-bold">ProductName: <p className="font-semibold">{item?.ProductName}</p></div>
+                                    <div className="font-bold">ProductBrand: <p className="font-semibold">{item?.ProductBrand}</p></div>
+                                    <div className="font-bold">ProductCategory: <p className="font-semibold">{item?.ProductCategory}</p></div>
+                                    <div className="font-bold">Discount: <p className="font-semibold">{item?.Discount}</p></div>
+                                    <div className="font-bold">ProductPrice: <p className="font-semibold">{displayINRCurrency(item?.ProductPrice)}</p></div>
+                                    <div className="font-bold">ProductQuantity: <p className="font-semibold">{item?.Num}</p></div>
+                                    <div className="font-bold mt-2">TotalPrice: <p className="font-semibold">{displayINRCurrency(TotalPrice)}</p></div>
+                                    <div className="font-bold mt-2">DiscountPrice: <p className="font-semibold">-{displayINRCurrency(DiscountPrice)}</p></div>
+                                    <div className="font-bold mt-2">ProductSellingPrice: <p className="font-semibold">{displayINRCurrency(ProductSellingPrice)}</p></div>
+                                    <div className="font-bold mt-2">DeliveryChargePrice: <p className="font-semibold">+{displayINRCurrency(DeliveryChargePrice)}</p></div>
+                                    <div className="font-bold mt-2">CurrentTotalPrice: <p className="font-semibold">{displayINRCurrency(CurrentTotalPrice)}</p></div>
+                                </div>
+
+                                <div className="mt-3 bg-slate-200 p-4 rounded">
+                                    <p className="font-semibold">Description:</p>
+                                    <p>{item.ProductDescription}</p>
+                                </div>
+
+                                <div className="mt-3 bg-slate-200 p-4 rounded">
+                                    <p className="font-semibold">Address:</p>
+                                    <div className="flex flex-col gap-2">
+                                        <p>Name: {item.FullName}</p>
+                                        <p>Phone Number: {item.PhoneNumber}</p>
+                                        <p>Alt Phone Number: {item.AltPhoneNumber}</p>
+                                        <p>Pincode: {item.Pincode}</p>
+                                        <p>State: {item.State}</p>
+                                        <p>City: {item.City}</p>
+                                        <p>HouseNo: {item.HouseNo}</p>
+                                        <p>RoadName: {item.RoadName}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 flex flex-col gap-3">
+                                    {item?.Confirmation === "Confirmed" ? (
+                                        <Link onClick={handelPayError}>
+                                            <button className="w-full border border-red-600 h-12 rounded-lg font-bold hover:bg-red-600 hover:text-white">
+                                                Pay
+                                            </button>
+                                        </Link>
+                                    ) : (
+                                        <Link to={`/User-Wallet/${item._id}`}>
+                                            <button className="w-full border border-red-600 h-12 rounded-lg font-bold hover:bg-red-600 hover:text-white">
+                                                Pay
+                                            </button>
+                                        </Link>
+                                    )}
+                                    <button
+                                        className="w-full border border-red-600 h-12 rounded-lg font-bold hover:bg-red-600 hover:text-white"
+                                        onClick={() => deleteAddToCart(item?._id)}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </li>
                         );
                     })
                 ) : ("")}
             </ul>
-            <div className='bg-white ml-[1006px] mt-10 mb-3 rounded-lg shadow-lg flex justify-center w-[250px] h-[50px]'>
-                <div className='font-bold flex justify-center items-center text-xl'>Total:
-                    <p>{displayINRCurrency(totalAddToCart)}</p>
-                </div>
+
+            <div className="mt-6 bg-white w-full max-w-xs mx-auto rounded-lg shadow-lg flex justify-center items-center h-14">
+                <div className="font-bold text-xl">Total: <p>{displayINRCurrency(totalAddToCart)}</p></div>
             </div>
         </div>
     );

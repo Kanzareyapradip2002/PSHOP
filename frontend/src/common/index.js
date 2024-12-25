@@ -1,6 +1,6 @@
 
-const backendDomain = process.env.P_SHOP
-const BankbackendDomain = process.env.BANK 
+const backendDomain = "https://p-shop-sxai.onrender.com";
+const BankbackendDomain = "https://p-shop-bankbackend.onrender.com";
 
 const SummaryApi = {
     SignUp: {
@@ -96,10 +96,6 @@ const SummaryApi = {
         url: `${backendDomain}/DeleteAddToCart/:id`, 
         method: "DELETE"
     },
-    LoginUser:{
-        url: `${backendDomain}/LoginUser`, 
-        method: "POST"
-    },
     GetBankAccount: {
         url: `${BankbackendDomain}/GetBankAccount`, 
         method: "GET"
@@ -109,8 +105,7 @@ const SummaryApi = {
         url: `${BankbackendDomain}/AddBankAccount`, 
         method: "POST"
     },
-    
-    
+
     GetAddBankAccount: {
         url: `${BankbackendDomain}/GetAddBankAccount`, 
         method: "GET"

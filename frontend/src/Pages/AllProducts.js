@@ -62,7 +62,7 @@ const AllProducts = () => {
         </button>
       </div>
 
-      <div className='flex-wrap flex items-center gap-6 pb-40 pt-4 h-[calc(100vh-190px)] overflow-y-scroll scrollbar-none'>
+      <div className='flex-wrap flex items-center gap-6 pb-30 pt-4 h-[calc(100vh-140px)] overflow-y-scroll scrollbar-none'>
         {allProduct.length > 0 ? (
           allProduct.map((product) => (
             <AdminProductCard data={product} fetchData={fetchAllProduct} key={product.id} />

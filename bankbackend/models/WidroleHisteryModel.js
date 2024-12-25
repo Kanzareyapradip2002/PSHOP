@@ -3,7 +3,8 @@ const  mongoose = require("mongoose")
 
 const WdroalaHistreySchema = new mongoose.Schema({
     AccountNumber:String,
-    Balance:String
+    Balance:String,
+    Code:String
 },{
    timestamps:true
 })

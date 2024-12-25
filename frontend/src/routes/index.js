@@ -10,7 +10,6 @@ import AllProducts from '../Pages/AllProducts'
 import EmailPage from '../Components/EmailPage'
 import MainCategoryList from '../Pages/MainCategoryList'
 import Category from '../Pages/Category/Category'
-import ShowCategoryProduct from '../Pages/Category/ShowCategoryProduct'
 import SeandMessageOner from '../Pages/Banner/SeandMessageOner'
 import PlaceOrderPage from '../Pages/Category/PlaceOrderPage'
 import AddToCart from '../Pages/Category/AddToCart'
@@ -24,6 +23,7 @@ import ConformedOrderDetels from '../Pages/Category/ConformedOrderDetels'
 import RecevaPaymantHistory from '../Pages/Paymant/RecevaPaymantHistory'
 import CancelOrderDetels from '../Pages/Category/CancelOrderDetels'
 import OrderCancel from '../Pages/Category/OrderCancel'
+import ShowCategoryProduct from '../Pages/Category/ShowCategoryProduct'
 
 
 const router = createBrowserRouter([
@@ -54,10 +54,6 @@ const router = createBrowserRouter([
             {
                 path:"Category/:categoryName",
                 element:<Category/>
-            },
-            {
-               path:"ShowCategoryProduct",
-               element:<ShowCategoryProduct/>
             },
             {
                 path:"Seand-Massge-Oner",
@@ -121,16 +117,20 @@ const router = createBrowserRouter([
                 element:<AddToCart/>
             },
             {
-                path:"User-Wallet/:Code",
+                path:"User-Wallet/:id",
                 element:<Wallet/>
             },
             {
-                path:"AddBankAccount/:Codes",
+                path:"AddBankAccount",
                 element:<AddBankAccount/>
             },
             {
                 path:"PaymentPage/:AccountNumber",
                 element:<PamantPage/>
+            },
+            {
+                path:"ShowCategory",
+                element:<ShowCategoryProduct/>
             },
             
               

@@ -1,149 +1,154 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Carousel from '../Banner/Carousel';
 import displayINRCurrency from '../../helpers/displayCurrency';
-import VarticalProductCard from '../../Components/VarticalProductCard';
-import { useSelector } from 'react-redux';
-import ROLE from '../../common/role';
 
 const ShowCategoryProduct = () => {
-  const user = useSelector((state) => state?.user?.user);
   const location = useLocation();
-  const { product } = location.state || {};
-  const navigate = useNavigate()
+  const { product } = location.state || {}; // Fallback for missing product
+  const navigate = useNavigate();
+  
+  const [loading, setLoading] = useState(true); // Handle loading state
+  const [productDetails, setProductDetails] = useState(null);
 
-  const [currentImage, setCurrentImage] = useState(product?.productImage);
+  useEffect(() => {
+    if (product) {
+      setLoading(false);
+      setProductDetails(product); // Use the passed product directly
+    } else {
+      setLoading(false);
+      toast.error("Product not found.");
+    }
+  }, [product]);
 
-  if (!product) {
-    return <div>No product information available.</div>;
+  // Fallback values for when product data might be missing
+  const ProductSellingPrice = parseFloat(productDetails?.selling || 0);
+  
+  // Calculate Discount
+  const DiscountPrice = productDetails?.price && productDetails?.selling
+    ? productDetails?.price - productDetails?.selling
+    : 0;
+  const DiscountPercentage = productDetails?.price && productDetails?.selling
+    ? ((productDetails?.price - productDetails?.selling) / productDetails?.price * 100).toFixed(2)
+    : 0;
+  const Discount = `${DiscountPercentage > 0 ? DiscountPercentage : 0}%`;
+
+  // Calculate Delivery Charge Based on Discount Percentage
+  let deliveryChargePrice = 0;
+  if (DiscountPercentage > 0 && DiscountPercentage < 30) {
+    deliveryChargePrice = 50;
+  } else if (DiscountPercentage >= 31 && DiscountPercentage < 60) {
+    deliveryChargePrice = 70;
+  } else if (DiscountPercentage >= 61 && DiscountPercentage < 90) {
+    deliveryChargePrice = 90;
+  } else if (DiscountPercentage >= 91) {
+    deliveryChargePrice = 100;
   }
-  const productImages = [
-    product.productImage,
-    product.productOtherImage1,
-    product.productOtherImage2,
-    product.productOtherImage3,
-    product.productOtherImage4,
-  ].filter(image => image !== null && image !== undefined);
-  const ProductPrice = parseFloat(product.price)
-  const ProductSelingPrice =parseFloat(product.selling)
-  const ProductName = product.productName
-  const ProductBrand = product.brandName
-  const ProductCategory = product.category
 
-  const calculatePercentageDifference = (price, sellingPrice) => {
-    if (sellingPrice === 0) return "Selling price cannot be zero.";
-    return ((price - sellingPrice) / price * 100).toFixed(2);
+  const TotalPrice = ProductSellingPrice + deliveryChargePrice;
+
+  const handleShowDataCategory = () => {
+    if (productDetails) {
+      navigate('/Place-Order', { state: { productDetails } });
+    } else {
+      toast.error("Product not found.");
+    }
   };
 
-  const percentageDifference = calculatePercentageDifference(parseFloat(product.price), parseFloat(product.selling));
-  const Discount =`${percentageDifference > 0 ? percentageDifference : 0}%`;
-
-  const handleShowDataCategory = (product) => {
-    navigate('/Place-Order', { state: { product } });
-};
-
+  // Handling the loading state
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <>
-      <div className='flex cursor-pointer'>
-        <div className='container mx-1 mb-1'>
-          <div className='flex flex-col ml-3 gap-3 mt-3'>
-            {productImages.map((Product, index) => (
-              <div>
-                <img
-                  key={index}
-                  src={Product}
-                  className="h-20 w-20 object-cover"
-                  onClick={() => setCurrentImage(Product)}
-                  alt=''
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className='mt-3'>
-          <img
-            src={currentImage}
-            className=" h-[460px] mr-[1100px] w-[530px] pb-4"
-            alt=''
+    <div>
+      {!productDetails ? (
+        <p>Product not found</p> // If the product with the given id is not found
+      ) : (
+        <div>
+          <Carousel
+            img1={productDetails.productImage}
+            img2={productDetails.productOtherImage1}
+            img3={productDetails.productOtherImage2}
+            img4={productDetails.productOtherImage3}
+            img5={productDetails.productOtherImage4}
           />
-        </div>
 
-      </div>
-      <div className='mt-[-460px] ml-[746px] bg-slate-200 h-[440px] rounded mr-3 mb-6 '>
-        <div className=' flex items-center justify-center font-semibold'>
-          <p className='mt-6'>
-            Product Detels
-          </p>
-        </div>
-        <div className='bg-white h-[270px] w-[400px] ml-14 mt-8 rounded-lg  '>
-          <div className='flex flex-row ml-16 pr-4'>
-            <div className='mt-14 flex flex-row'>
-              <p className='font-semibold'>ProductName:</p>
-              <p className='font-semibold text-black ml-20 text-ellipsis line-clamp-2 '>
-                {ProductName}
-              </p>
-            </div>
-          </div>
-          <div className=' flex flex-row ml-16'>
-            <div className='flex flex-row'>
-              <p className='font-semibold'>ProductBrand:</p>
-              <p className='font-semibold text-black ml-20 '>
-                {ProductBrand}
-              </p>
-            </div>
-          </div>
-          <div className=' flex flex-row ml-16'>
-            <div className='flex flex-row'>
-              <p className='font-semibold'>ProductCategory:</p>
-              <p className='font-semibold text-black ml-14 capitalize '>
-                {ProductCategory}
-              </p>
-            </div>
-          </div>
-          <div className=' flex flex-row ml-16'>
-            <div className=' flex flex-row'>
-              <p className='font-semibold'>ProductPrice:</p>
-              <p className='font-semibold text-neutral-500 ml-[85px] '>
-                <del>
+          <div className="mt-5 ml-3 h-full rounded mr-3 mb-6">
+            <div className="flex flex-col md:flex-row gap-7">
+              {/* Product Image and Quantity Selection */}
+              <div className="h-auto flex justify-center w-full pb-2 md:w-[350px] bg-slate-200">
+                <div className="max-h-full max-w-full mt-5">
+                  <img
+                    src={productDetails.productImage}
+                    alt="Product"
+                    className="object-contain max-w-full max-h-[300px] mix-blend-multiply"
+                  />
+                </div>
+              </div>
 
-                  {displayINRCurrency(ProductPrice)}
-                </del>
-              </p>
+              {/* Product Details */}
+              <div className="h-auto w-full md:w-[850px] bg-slate-200">
+                <div className="p-4">
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Product Name :</p>
+                      {productDetails.productName}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Product Category :</p>
+                      {productDetails.category}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Product Brand :</p>
+                      {productDetails.brandName}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Discount:</p>
+                      {Discount}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Discount Price:</p>
+                      {displayINRCurrency(DiscountPrice)}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Product Price :</p>
+                      {displayINRCurrency(productDetails.price)}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Product Selling Price :</p>
+                      {displayINRCurrency(productDetails.selling)}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Delivery Charge :</p>
+                      {displayINRCurrency(deliveryChargePrice)}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 capitalize">
+                      <p className="font-semibold">Total Price :</p>
+                      {displayINRCurrency(TotalPrice)}
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 rounded-lg mt-3 p-3">
+                    <div className="gap-2 ml-2 capitalize overflow-y-scroll scrollbar-none">
+                      <p className="font-semibold">Description: </p>
+                      {productDetails.description}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              onClick={handleShowDataCategory}
+              className="h-[45px] w-full cursor-pointer mt-6 bg-red-600 rounded-lg flex items-center justify-between px-4"
+            >
+              <button className="text-white font-bold text-lg">Add to Cart</button>
+              <p className="font-bold text-white">{displayINRCurrency(TotalPrice)}</p>
             </div>
           </div>
-          <div className=' flex flex-row ml-16'>
-            <div className=' flex flex-row'>
-              <p className='font-semibold'>Discount:</p>
-              <p
-                className={`font-semibold  ml-[115px] ${percentageDifference < 50 ? 'text-red-500' : 'text-green-500'}`}
-              >
-                {Discount}
-              </p>
-            </div>
-          </div>
-          <div className=' flex flex-row ml-16'>
-            <div className=' flex flex-row'>
-              <p className='font-semibold'>ProductsellingPrice:</p>
-              <p className='font-semibold text-black ml-10 '>
-                {displayINRCurrency(ProductSelingPrice)}
-              </p>
-            </div>
-          </div>
-          
-
         </div>
-        {user?._id && user?.role === ROLE.GENERAL && (
-        <div className='flex items-center justify-center mt-6  ' >
-          <button className=' border border-red-500  bg-red-500 p-2 font-bold rounded-lg  hover:text-white hover:bg-red-600'
-           onClick={() => handleShowDataCategory(product)}
-          >Add To Cart</button>
-        </div>
-        )}
-      </div>
-      
-      <VarticalProductCard category={product.category} heading={"Recommended Product"}/>
-  
-    </>
+      )}
+    </div>
   );
 };
 

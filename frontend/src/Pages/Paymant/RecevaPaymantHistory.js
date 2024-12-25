@@ -1,91 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify'; // Assuming you're using react-toastify for toast notifications
-import SummaryApi from '../../common'; // Assuming you have this file that exports the API configuration
+import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify'; 
+import SummaryApi from '../../common';
 import moment from 'moment';
 import displayINRCurrency from '../../helpers/displayCurrency';
+import Logo from '../../assest/p-shop.png'; 
 
 const RecevaPaymantHistory = () => {
-  const [paymentHistory, setPaymentHistory] = useState([]); // Initializing state for payment history
-  const [totalAmount, setTotalAmount] = useState(0); // State for total payment amount
-  const [isLoading, setIsLoading] = useState(true); // State for loading indicator
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Function to fetch payment history from the API
-  const fetchPaymentHistory = async () => {
-    setIsLoading(true); // Start loading when fetching data
+  // Memoizing the fetchPaymentHistory function with useCallback
+  const fetchPaymentHistory = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(SummaryApi.RecevPaymentHistory.url, {
         method: SummaryApi.RecevPaymentHistory.method,
-        credentials: 'include', // Sending credentials if needed
+        credentials: 'include',
       });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
-      const dataResponse = await response.json(); // Parsing JSON data
+      const dataResponse = await response.json();
 
       if (dataResponse.success) {
-        setPaymentHistory(dataResponse.data); // Update state with fetched data
-        calculateTotal(dataResponse.data); // Calculate the total payment amount
+        setPaymentHistory(dataResponse.data);
+        calculateTotal(dataResponse.data);
       } else {
-        toast.error(dataResponse.message); // Show error message if API indicates failure
+        toast.error(dataResponse.message);
       }
     } catch (error) {
-      toast.error("Failed to fetch payment history"); // Show general error if fetch fails
-      console.error(error); // Log error for debugging
+      toast.error("Failed to fetch payment history");
+      console.error(error);
     } finally {
-      setIsLoading(false); // Stop loading when data fetch is complete
+      setIsLoading(false);
     }
-  };
+  }, []); // Empty dependency array since it doesn't rely on any outside state or props
 
   // Function to calculate the total payment amount
   const calculateTotal = (data) => {
     const total = data.reduce((acc, history) => acc + parseFloat(history.Balance || 0), 0);
-    setTotalAmount(total); // Set the total amount state
+    setTotalAmount(total);
   };
 
-  // useEffect hook to fetch payment history when the component is mounted
   useEffect(() => {
-    fetchPaymentHistory(); // Call the fetch function on mount
-  }, []);
+    fetchPaymentHistory(); // Call fetchPaymentHistory when the component mounts
+  }, [fetchPaymentHistory]); // Fetch when fetchPaymentHistory changes (memoized)
 
   if (isLoading) {
-    return <div>Loading...</div>; // Show loading indicator while fetching data
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="ring">
+          <img src={Logo} alt="logo" className="mt-3" />
+          <span className="loading-spinner"></span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      {/* Render payment history as a list */}
+    <div className="p-4">
       {paymentHistory.length === 0 ? (
-        <p>No payment history available.</p> // Message if no data is available
+        <p>No payment history available.</p>
       ) : (
         <>
-          <ul>
+          <ul className="space-y-4">
             {paymentHistory.map((history) => (
-              <li key={history.id} className="overflow-y-scroll scrollbar-none"> {/* Using history.id if it's unique */}
-                <div className="flex flex-wrap ">
-                  <div className="h-16 flex rounded-md mt-2 ml-2 bg-white shadow-lg p-2">
-                    <div className="mt-4 flex">
-                      <h2 className="font-semibold">Account Number: </h2>
-                      <h2 className="h-8">{history.AccountNumber}</h2>
-                    </div>
-                    <div className="mt-4 ml-[130px] flex">
-                      <h2 className="font-semibold">Payment Date: </h2>
-                      <h2 className="h-8">{moment(history.createdAt).format('LL')}</h2>
-                    </div>
-                    <div className="mt-4 ml-[140px] flex">
-                      <h2 className="font-semibold">Payment Amount: </h2>
-                      <h2 className="h-8 ml-2 text-green-600">+{displayINRCurrency(history.Balance)}</h2>
-                    </div>
-                  </div>
+              <li key={history.id} className="bg-white shadow-md rounded-lg p-4 flex flex-wrap gap-4">
+                <div className="flex-1">
+                  <h2 className="font-semibold text-sm sm:text-base">Account Number:</h2>
+                  <p className="text-gray-700">{history.AccountNumber}</p>
+                </div>
+                <div className="flex-1">
+                  <h2 className="font-semibold text-sm sm:text-base">Payment Date:</h2>
+                  <p className="text-gray-700">{moment(history.createdAt).format('LL')}</p>
+                </div>
+                <div className="flex-1">
+                  <h2 className="font-semibold text-sm sm:text-base">Payment Amount:</h2>
+                  <p className="text-green-600 text-lg">{displayINRCurrency(history.Balance)}</p>
                 </div>
               </li>
             ))}
           </ul>
-          {/* Total amount */}
-          <div className="bg-white mt-4 rounded-lg shadow-lg flex justify-center w-[250px] h-[50px] mx-auto">
-            <div className="font-bold flex justify-center items-center text-xl">
-              Total: <p>{displayINRCurrency(totalAmount)}</p>
+          <div className="mt-8 bg-white rounded-lg shadow-lg flex justify-center w-full sm:w-[300px] mx-auto p-4">
+            <div className="font-bold text-xl text-center">
+              <p>Total: {displayINRCurrency(totalAmount)}</p>
             </div>
           </div>
         </>
@@ -94,4 +95,4 @@ const RecevaPaymantHistory = () => {
   );
 };
 
-export default RecevaPaymantHistory;
+export default RecevaPaymantHistory

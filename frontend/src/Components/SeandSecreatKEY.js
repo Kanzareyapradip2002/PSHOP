@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -14,7 +14,8 @@ const SeandSecreatKEY = ({ onClose, name, email, role, userId, callFun }) => {
     });
     const [error, setError] = useState('');
     const [generatedOtp, setGeneratedOtp] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [timer, setTimer] = useState(0); // Track countdown time
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
@@ -22,28 +23,29 @@ const SeandSecreatKEY = ({ onClose, name, email, role, userId, callFun }) => {
             ...prevData,
             [name]: value,
         }));
-        setError(''); 
+        setError('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-    
+
         if (!data.email) {
             toast.error("Please Enter Valid Email Address");
             setIsSubmitting(false);
             return;
         }
-    
+
         if (!submitOtp) {
             const otpCode = Math.floor(100000 + Math.random() * 900000);
-            
-            if (data.email === email) { 
+
+            if (data.email === email) {
                 try {
                     const response = await axios.post(SummaryApi.SendKEY.url, { email: data.email, Code: otpCode });
-                    setGeneratedOtp(otpCode); 
-                    setSubmitOtp(true);  
-                    setData((prevData) => ({ ...prevData, KEY: '' })); 
+                    setGeneratedOtp(otpCode);
+                    setSubmitOtp(true);
+                    setData((prevData) => ({ ...prevData, KEY: '' }));
+                    setTimer(120); // Start a 2-minute timer
                     if (response) {
                         toast.success('KEY sent to email!');
                     }
@@ -57,15 +59,35 @@ const SeandSecreatKEY = ({ onClose, name, email, role, userId, callFun }) => {
         } else {
             if (data.KEY === String(generatedOtp)) {
                 toast.success('Verification Success');
-                setIsUpdatingUserRole(true); 
+                setIsUpdatingUserRole(true);
             } else {
                 setError('Invalid KEY. Please try again.');
             }
         }
-    
-        setIsSubmitting(false); 
+
+        setIsSubmitting(false);
     };
-    
+
+    // Countdown timer effect
+    useEffect(() => {
+        let interval;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+        } else {
+            clearInterval(interval); // Stop timer when it reaches 0
+        }
+
+        return () => clearInterval(interval); // Cleanup on component unmount or timer stop
+    }, [timer]);
+
+    // Format the remaining time in mm:ss format
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    };
 
     return (
         <section id="login">
@@ -114,12 +136,18 @@ const SeandSecreatKEY = ({ onClose, name, email, role, userId, callFun }) => {
                                     </div>
                                 )}
                                 <button
-                                    type="submit"
+                                    type='submit'
                                     className={`bg-red-600 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-4 hover:bg-red-700 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                    disabled={isSubmitting}
                                 >
-                                    {submitOtp ? 'Submit OTP' : 'Send OTP'}
+                                    {(submitOtp ? 'Submit OTP' : 'Send OTP')}
                                 </button>
+                                <div className='ml-28'>
+                                    {
+                                        timer !== 0 && (
+                                            `Otp Expierd :${formatTime(timer)}`
+                                        )
+                                    }
+                                </div>
                             </form>
                         </div>
                     </div>
