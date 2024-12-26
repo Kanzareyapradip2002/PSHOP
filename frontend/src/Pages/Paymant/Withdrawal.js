@@ -5,12 +5,17 @@ import SummaryApi from '../../common';
 import SeandSecreatKEYPamant from '../../Components/SeandSecreatKEYPamant';
 import CashMoneyDeposit from './CashMoneyDeposit';
 import Logo from '../../assest/p-shop.png';
+import { useSelector } from 'react-redux';
 const Withdrawal = ({ AccountNumber, TotalPrice, EmailId, AddToCartData }) => {
+  const user = useSelector((state) => state?.user?.user);
+  console.log(user?.verificationCode)
   const [allAccounts, setAllAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState({
     Account: AccountNumber,
     Balance: TotalPrice, // Balance to Withdraw
+    Code:user?.verificationCode
+
   });
   const [show, setShow] = useState(false);
 
@@ -122,6 +127,7 @@ const Withdrawal = ({ AccountNumber, TotalPrice, EmailId, AddToCartData }) => {
         body: JSON.stringify({
           AccountNumber: account.Account,
           Balance: account.Balance,
+          Code:account.Code
         }),
       });
 

@@ -1,6 +1,6 @@
 
-const backendDomain = "https://p-shop-sxai.onrender.com";
-const BankbackendDomain = "https://p-shop-bankbackend.onrender.com";
+const backendDomain = "http://localhost:8001";
+const BankbackendDomain = "http://localhost:8002";
 
 const SummaryApi = {
     SignUp: {

@@ -1,28 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import AddBank from '../Paymant/AddBank';
 import PaymantHistory from './PaymantHistory';
-import Logo from '../../assest/p-shop.png';;
+import Logo from '../../assest/p-shop.png';
+import SummaryApi from '../../common';
+import { toast } from 'react-toastify';
 
 const Wallet = () => {
   const user = useSelector((state) => state?.user?.user);
-  const { email, name, role } = user || {}; // Destructure user info
-  const id = useParams();
-  const Codes = id.id;
+  const { email, name, role } = user || {};
+  const { id } = useParams();
+  const ids = id;
+  localStorage.setItem('addtocart', ids);
 
-  console.log(Codes)
+  const [code, setCode] = useState(null);
 
-  localStorage.setItem('addtocart', Codes);
+  const fetchCode = async () => {
+    try {
+      const response = await fetch(SummaryApi.AllAddToCart.url, {
+        method: SummaryApi.AllAddToCart.method,
+        credentials: 'include',
+      });
 
-  // Loading state
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const dataResponse = await response.json();
+
+      if (dataResponse.success) {
+        setCode(dataResponse.data);
+      } else {
+        toast.error(dataResponse.message);
+      }
+    } catch (error) {
+      toast.error('Failed to fetch Code');
+      console.error(error);
+    } 
+  };
+
+  useEffect(() => {
+    fetchCode();
+  }, []);
+
+  // Finding the product code object with matching ID
+  const ProdactCode = code?.find(Code => Code._id === ids);
+
+  // Check if ProdactCode is found and then access the VerificationCodes
+  const Codes = ProdactCode ? ProdactCode.VerificationCodes : [];
+
+  console.log(Codes); // You can now safely use `Codes`
+
   if (!user) {
-    return <p>
-      <div class="ring">
-        <img src={Logo} alt='logo' className='mt-3' />
+    return (
+      <div className="ring">
+        <img src={Logo} alt="logo" className="mt-3" />
         <span></span>
       </div>
-    </p>
+    );
   }
 
   return (
@@ -45,18 +81,15 @@ const Wallet = () => {
           <p className="text-sm text-gray-600">{role || 'Not available'}</p>
         </div>
       </div>
+
       <div className="bg-white rounded-lg shadow-xl p-4 mt-5 overflow-y-scroll scrollbar-none">
-        <div className="w-full sm:w-[300px] ml-3 rounded h-auto mt-6 bg-white shadow-xl p-4">
-          {user && (
-            <>
-              <div className="text-xl ml-2 font-bold cursor-pointer">
-                <Link to={`/AddBankAccount`}>
-                  <p>Add Bank Account</p>
-                </Link>
-              </div>
-            </>
-          )}
-        </div>
+        {user && (
+          <div className="text-xl ml-2 font-bold cursor-pointer">
+            <Link to={`/AddBankAccount/${ids}`}>
+              <p>Add Bank Account</p>
+            </Link>
+          </div>
+        )}
         <AddBank />
       </div>
 

@@ -13,7 +13,8 @@ async function AddBankAccount(req, res) {
             EmailId,
             AccountType,
             AccountNumber,
-             } = req.body;
+            ProcuctCode,
+            VerificationCodes} = req.body;
 
         const payload = {
             Bank,
@@ -26,6 +27,8 @@ async function AddBankAccount(req, res) {
             EmailId,
             AccountType,
             AccountNumber,
+            ProcuctCode,
+            VerificationCodes
         };
 
         const imageData = new AddBankAccountModel(payload);

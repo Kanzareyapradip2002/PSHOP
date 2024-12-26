@@ -100,6 +100,7 @@ const PamantPage = () => {
   const ProductSellingPrice = TotalPrice - DiscountPrice;
   const CurrentTotalPrice = ProductSellingPrice + DeliveryChargePrice;
 
+  
 
   return (
     <div>

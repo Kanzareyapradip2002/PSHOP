@@ -121,7 +121,11 @@ const router = createBrowserRouter([
                 element:<Wallet/>
             },
             {
-                path:"AddBankAccount",
+                path:"User-Wallet",
+                element:<Wallet/>
+            },
+            {
+                path:"AddBankAccount/:Code",
                 element:<AddBankAccount/>
             },
             {

@@ -15,7 +15,6 @@ const Header = () => {
     const [menuDisplay, setMenuDisplay] = useState(false);
     const [allAddToCart, setAllAddToCart] = useState([]);
     const verificationCodes = user?.verificationCode;
-
     useEffect(() => {
         if (verificationCodes) {
             const fetchAllUsers = async () => {
@@ -41,7 +40,8 @@ const Header = () => {
             fetchAllUsers();
         }
     }, [verificationCodes]);
-
+    
+    
     const handleLogout = async () => {
         // Remove the login-related data from localStorage
         localStorage.removeItem("loginUserEmail");
@@ -74,7 +74,7 @@ const Header = () => {
                                 {user?.profilePic ? (
                                     <img src={user?.profilePic} className='w-10 h-10 rounded-full' alt={user?.name} />
                                 ) : (
-                                    <FaUserTie className='w-10 h-10 rounded-full'/>
+                                    <FaUserTie className='w-6 h-6 rounded-full'/>
                                 )}
                             </div>
                         )}
@@ -120,7 +120,7 @@ const Header = () => {
                     </div>
 
                     {user?._id && user?.role === ROLE.GENERAL && (
-                        <Link to={"/User-Wallet/:Code"} className="text-3xl relative">
+                        <Link to={"/User-Wallet"} className="text-3xl relative">
                             <HiWallet />
                         </Link>
                     )}
