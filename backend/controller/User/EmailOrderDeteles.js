@@ -38,9 +38,6 @@ async function EmailOrderDetails(req, res) {
         subject: `Order Details for Send By P-SHOP`,
         html: `
             <div style="border: 2px solid #007BFF; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
-                <div style="text-align: center;">
-                  <img src="cid:product_image" alt="Product Image" style="max-width: 100%; height: auto; border-radius: 8px;"/>
-                </div>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Dear Customer,</p>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Here are the details of your order:</p>
 
