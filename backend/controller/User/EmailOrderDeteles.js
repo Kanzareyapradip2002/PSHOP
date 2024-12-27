@@ -24,20 +24,24 @@ async function EmailOrderDetails(req, res) {
         confirmation
     } = req.body;
 
+    // Ensure transporter uses proper credentials
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
+            user: process.env.EMAIL_USER, // Ensure EMAIL_USER and EMAIL_PASS are set in your .env file
+            pass: process.env.EMAIL_PASS, // Ensure EMAIL_PASS is set in your .env file
         },
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.EMAIL_USER, // Ensure this matches the sender email
         to: email,
         subject: `Order Details for Send By P-SHOP`,
         html: `
             <div style="border: 2px solid #007BFF; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
+                <div style="text-align: center;">
+                    <img src="cid:product_image" alt="Product Image" style="max-width: 100%; height: auto; border-radius: 8px;" />
+                </div>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Dear Customer,</p>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Here are the details of your order:</p>
 
@@ -63,15 +67,14 @@ async function EmailOrderDetails(req, res) {
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">State: <strong>${state}</strong></p>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">House No: <strong>${houseNo}</strong></p>
                 <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Road Name: <strong>${roadName}</strong></p>
-                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Thank you for purchase P-SHOP !</p>
-                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Your Order is <span style='font-size:2 0px;'>&#128077;</span>!</p>
-
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Thank you for your purchase at P-SHOP!</p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">Your order is <strong>${confirmation}</strong></p>
             </div>
         `,
         attachments: [
             {
                 filename: 'product_image.jpg', // Adjust the filename if necessary
-                path: ProductImage, // This could be a local file path or URL
+                path: ProductImage, // This should be a valid file path or URL
                 cid: 'product_image' // Content ID for embedding the image
             }
         ]
