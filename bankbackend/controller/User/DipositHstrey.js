@@ -2,15 +2,19 @@ const DipositHstreyModel = require("../../models/DipositHstreyModel")
 
 async function DipositHstrey(req, res) {
     try {
-        const {
+     const{
             AccountNumber,
-            Balance, } = req.body;
+            Balance,
+            VerificationCodes,
+            ProductId } = req.body;
 
         const payload = {
             AccountNumber,
-            Balance
+            Balance,
+            VerificationCodes,
+            ProductId
         };
-
+        
         const imageData = new DipositHstreyModel(payload);
         const savedImage = await imageData.save();
 
