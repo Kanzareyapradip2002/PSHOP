@@ -3,7 +3,9 @@ const  mongoose = require("mongoose")
 
 const DipositHstreySchema = new mongoose.Schema({
     AccountNumber:String,
-    Balance:String
+    Balance:String,
+    VerificationCodes:String,
+    ProductId:String
 },{
    timestamps:true
 })
